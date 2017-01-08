@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: simon
- * Date: 07/01/17
- * Time: 17:58
- */
 interface Str extends Vector
 {
     public function between();
@@ -20,7 +14,7 @@ interface Str extends Vector
     public function humanize();
     public function isAlpha();
     public function isAlphanumeric();
-    public function isBlank(); // Just use is empty
+    public function isBlank();
     public function isLowerCase();
     public function isUpperCase();
     public function lines();

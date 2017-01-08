@@ -1,17 +1,13 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: simon
- * Date: 07/01/17
- * Time: 17:59
- */
 interface Vector extends Set, Countable, Indexed, NumberContainer, Sortable, Traversable
 {
-    public function append($vector); // vector or item? Ideal is vector for string and item for vector
-    public function prepend($vector); // vector or item? Ideal is vector for string and item for vector
-    public function surround($vector); // vector or item? Ideal is vector for string and item for vector
-    public function concat($vector);
+    public function insert($index, $item);
+    public function overwrite($index, $item);
+    public function append($item);
+    public function prepend($item);
+    public function concat();
+    public function merge($vector, ...$vectors); // Like php array_merge
     public function first($condition = null);
     public function last($condition = null);
     public function drop($condition);
@@ -38,20 +34,21 @@ interface Vector extends Set, Countable, Indexed, NumberContainer, Sortable, Tra
     public function random();
     public function shuffle();
     public function countSubsets($subset);
-    public function slice($start, $length = null);
+    public function slice($start, $length);
+    public function removeSlice($start, $length);
     public function splice($vector, $start, $length = 0);
     public function chunk($size = null);
+    public function join($glue = '');
     public function flatten($level = null);
-    public function intersperse($value);
-    public function subsets();
     public function unique();
-    public function intersection($vector);
+    public function subsets();
     public function permutations();
+    public function intersperse($value);
+    public function intersection($vector);
     public function difference($vector);
     public static function times(callable $callable, $size);
     public static function iterate(callable $callable, $initial);
     public static function until(callable $predicate, callable $transform, $initial);
     public static function repeat($item);
     public static function cycle($vector);
-
 }

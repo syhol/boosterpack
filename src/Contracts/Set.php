@@ -13,14 +13,13 @@ interface Set extends Arrayable
     public function reduce(callable $callable, $initial = null);
     public function any(callable $callable);
     public function all(callable $callable);
-    public function clear();
-    public function isEmpty();
+    public function find(callable $callable);
     public function contains($item);
     public function containsAll($items);
     public function containsAny($items);
-    public function containsSubset($subset);
+    public function countValues($value);
     public function remove($value);
     public function removeAll($value);
-    public function countValues($value);
-    public function find(callable $callable);
+    public function clear();
+    public function isEmpty();
 }

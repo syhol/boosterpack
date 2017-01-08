@@ -1,18 +1,11 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: simon
- * Date: 07/01/17
- * Time: 22:06
- */
 interface Indexed extends ArrayAccess
 {
-    public function at($index);
-        public function set($index, $item);
-        public function insert($index, $item);
-    public function delete($index);
+    public function elementAt($index);
+    public function removeAt($index);
     public function has($index);
+    public function mapAt($index, callable $callable);
     public function indices($value = null);
     public function indexOf($value);
     public function lastIndexOf($value);
