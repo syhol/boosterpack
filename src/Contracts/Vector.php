@@ -6,10 +6,13 @@ interface Vector extends Set, Countable, Indexed, NumberContainer, Sortable, Tra
     public function overwrite($index, $item);
     public function append($item);
     public function prepend($item);
-    public function concat();
     public function merge($vector, ...$vectors); // Like php array_merge
     public function first($condition = null);
     public function last($condition = null);
+    public function init();
+    public function tail();
+    public function inits();
+    public function tails();
     public function drop($condition);
     public function take($condition);
     public function startsWith($vector);
