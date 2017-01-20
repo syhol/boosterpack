@@ -1,9 +1,19 @@
 <?php
 
-interface Vector extends Set, Countable, Indexed, NumberContainer, Sortable, Traversable
+namespace Boosterpack\Contracts\Data;
+
+use Boosterpack\Contracts\Fantasy\Foldable;
+use Boosterpack\Contracts\Fantasy\Monoid;
+use Boosterpack\Contracts\Fantasy\Monad;
+use Boosterpack\Contracts\Indexed;
+use Boosterpack\Contracts\Sortable;
+use JsonSerializable;
+
+interface Vector extends Indexed, Sortable, Foldable, Monoid, Monad, JsonSerializable
 {
     public function insert($index, $item);
     public function overwrite($index, $item);
+    public function remove($value);
     public function append($item);
     public function prepend($item);
     public function merge($vector, ...$vectors); // Like php array_merge
@@ -33,9 +43,6 @@ interface Vector extends Set, Countable, Indexed, NumberContainer, Sortable, Tra
     public function repeatTimes($count);
     public function cycleUntil($count);
     public function replaceSubset($subset1, $subset2);
-    public function reverse();
-    public function random();
-    public function shuffle();
     public function countSubsets($subset);
     public function slice($start, $length);
     public function removeSlice($start, $length);
@@ -43,11 +50,15 @@ interface Vector extends Set, Countable, Indexed, NumberContainer, Sortable, Tra
     public function chunk($size = null);
     public function join($glue = '');
     public function flatten($level = null);
+    public function reverse();
+    public function random();
+    public function shuffle();
     public function unique();
-    public function subsets();
-    public function permutations();
-    public function intersperse($value);
-    public function intersection($vector);
+    public function subsets(); // All orders subsequent
+    public function subsequences(); // Same order, all possible lengths, may not be subsequent
+    public function permutations(); // Same length,  all possible different orders
+    public function intersperse($value); // Insert a new value in between each existing value
+    public function intersect($vector);
     public function difference($vector);
     public static function times(callable $callable, $size);
     public static function iterate(callable $callable, $initial);

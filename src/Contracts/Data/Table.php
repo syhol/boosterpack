@@ -1,5 +1,7 @@
 <?php
 
+namespace Boosterpack\Contracts\Data;
+
 interface Table extends Vector
 {
     public function column($index);

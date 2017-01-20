@@ -1,6 +1,10 @@
 <?php
 
-interface Functor
+namespace Boosterpack\Contracts\Fantasy;
+
+use Traversable;
+
+interface Functor extends Traversable
 {
     /**
      * @param callable $function

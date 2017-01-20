@@ -1,5 +1,7 @@
 <?php
 
+namespace Boosterpack\Contracts\Fantasy;
+
 interface Semigroup
 {
     /**
