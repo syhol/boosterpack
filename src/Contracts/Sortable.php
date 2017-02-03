@@ -6,7 +6,7 @@ interface Sortable
 {
     /**
      * @param callable|null $callable
-     * @return self
+     * @return static
      */
     public function sort(callable $callable = null);
 }

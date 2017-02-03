@@ -5,12 +5,12 @@ namespace Boosterpack\Contracts\Fantasy;
 interface Monoid extends Semigroup
 {
     /**
-     * @return Monoid
+     * @return static
      */
     public static function fromEmpty();
 
     /**
-     * @return Monoid
+     * @return static
      */
     public function getEmpty();
 }

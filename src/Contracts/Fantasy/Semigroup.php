@@ -5,8 +5,8 @@ namespace Boosterpack\Contracts\Fantasy;
 interface Semigroup
 {
     /**
-     * @param Semigroup $value
-     * @return Semigroup
+     * @param mixed $value
+     * @return static
      */
-    public function concat(Semigroup $value);
+    public function concat($value);
 }

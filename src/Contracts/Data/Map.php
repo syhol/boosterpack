@@ -2,31 +2,17 @@
 
 namespace Boosterpack\Contracts\Data;
 
-use Boosterpack\Contracts\Fantasy\Foldable;
-use Boosterpack\Contracts\Fantasy\Monoid;
-use Boosterpack\Contracts\Fantasy\Monad;
-use Boosterpack\Contracts\Fantasy\Setoid;
-use Boosterpack\Contracts\Indexed;
-use Boosterpack\Contracts\Sortable;
-use JsonSerializable;
-use Traversable;
+use Boosterpack\Contracts\Indexed\MultiValueIndex;
+use Boosterpack\Contracts\Indexed\Pairable;
+use Boosterpack\Contracts\Indexed\UniqueKeyIndex;
+use Boosterpack\Contracts\Indexed\WritableIndex;
 
-interface Map extends Indexed, Sortable, Setoid, Foldable, Monoid, Monad, JsonSerializable, Traversable
+interface Map extends
+    StandardCollection,
+    MultiValueIndex,
+    UniqueKeyIndex,
+    Pairable,
+    WritableIndex
 {
-    /**
-     * @param $index
-     * @param $value
-     * @return self
-     */
-    public function setIfAbsent($index, $value);
 
-    /**
-     * @param $index
-     * @param $value
-     * @return self
-     */
-    public function set($index, $value); // Indexed
-
-    public function mapKeys(callable $callable);
-    public function mapValues(callable $callable);
 }

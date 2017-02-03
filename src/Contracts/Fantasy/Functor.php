@@ -6,7 +6,7 @@ interface Functor
 {
     /**
      * @param callable $function
-     * @return self
+     * @return static
      */
     public function map(callable $function);
 }

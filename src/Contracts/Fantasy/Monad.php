@@ -6,7 +6,7 @@ interface Monad extends Functor
 {
     /**
      * @param callable $function
-     * @return self
+     * @return static
      */
     public function bind(callable $function);
 }
