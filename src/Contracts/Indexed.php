@@ -3,19 +3,54 @@
 namespace Boosterpack\Contracts;
 
 use ArrayAccess;
+use Boosterpack\Contracts\Data\Maybe;
+use Boosterpack\Contracts\Data\Vector;
 
 interface Indexed extends ArrayAccess
 {
+    /**
+     * @param mixed $index
+     * @return Maybe
+     */
     public function elementAt($index);
-    public function removeAt($index); // ? may not allow removing items from an index
-    public function has($index);
+
+    /**
+     * @param mixed $index
+     * @param callable $callable
+     * @return self
+     */
     public function mapAt($index, callable $callable);
-    public function indexOf($value);
-    public function lastIndexOf($value);
+
+    /**
+     * @param mixed $value
+     * @return Vector
+     */
     public function indicesOf($value);
-    public function findIndex(callable $callable);
-    public function findLastIndex(callable $callable);
+
+    /**
+     * @param callable $callable
+     * @return Vector
+     */
     public function findIndices(callable $callable);
+
+    /**
+     * @return Vector
+     */
+    public function keys();
+
+    /**
+     * @return Vector
+     */
+    public function values();
+
+    /**
+     * @return Vector
+     */
     public function pairs();
+
+    /**
+     * @param $pairs
+     * @return Indexed
+     */
     public static function unPairs($pairs);
 }
