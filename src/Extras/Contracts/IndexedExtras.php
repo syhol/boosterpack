@@ -2,9 +2,7 @@
 
 namespace Boosterpack\Extras\Contracts;
 
-use Boosterpack\Contracts\Indexed;
-
-interface IndexedExtras extends Indexed
+interface IndexedExtras
 {
     public function removeAt($index);
     public function has($index);
