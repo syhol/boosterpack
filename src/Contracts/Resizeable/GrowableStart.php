@@ -7,7 +7,8 @@ use Boosterpack\Contracts\Data\Maybe;
 interface GrowableStart
 {
     /**
-     * @return Maybe[]|static[] [Maybe, static]
+     * @param mixed $item
+     * @return static
      */
-    public function unshift();
+    public function shift($item);
 }

@@ -10,7 +10,7 @@ interface UniqueValueIndex
      * @param mixed $value
      * @return Maybe
      */
-    public function findKeyOf($value);
+    public function keyOf($value);
 
     /**
      * @param callable $callable

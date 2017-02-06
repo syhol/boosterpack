@@ -2,16 +2,15 @@
 
 namespace Boosterpack\Contracts\Indexed;
 
-use Boosterpack\Contracts\Data\Maybe;
 use Boosterpack\Contracts\Data\Vector;
 
 interface MultiValueIndex
 {
     /**
      * @param mixed $value
-     * @return Maybe
+     * @return Vector
      */
-    public function findKeysOf($value);
+    public function keysOf($value);
 
     /**
      * @param callable $callable

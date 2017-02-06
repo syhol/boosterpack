@@ -12,37 +12,33 @@ namespace Boosterpack\Extras\Contracts\Data;
 interface VectorExtras
 {
     // Functions or extras
-    public function insert($index, $item);    // Push everything to the right +!
-    public function append($item);
-    public function prepend($item);
-    public function init();
-    public function tail();
-    public function inits();
-    public function tails();
-    public function drop($condition);
-    public function take($condition);
-    public function startsWith($vector);
-    public function endsWith($vector);
-    public function ensureStart($vector);
-    public function ensureEnd($vector);
-    public function removeStart($vector);
-    public function removeEnd($vector);
-    public function longestCommonPrefix($vector);
-    public function longestCommonSuffix($vector);
-    public function longestCommonSubset($vector);
-    public function pad($vector);
-    public function padStart($vector);
-    public function padEnd($vector);
-    public function trim($vector);
-    public function trimStart($vector);
-    public function trimEnd($vector);
+    public function insert($index, $item); // Push everything to the right +!
+    public function append($item); // alias of GrowableStart
+    public function prepend($item); // alias of GrowableEnd
+    public function drop($condition); // ShrinkableStart
+    public function take($condition); // ShrinkableStart
+    public function startsWith($vector); // ShrinkableStart
+    public function endsWith($vector);  // ShrinkableEnd
+    public function ensureStart($vector); // ResizableStart
+    public function ensureEnd($vector); // ResizableEnd
+    public function removeStart($vector); // ResizableStart
+    public function removeEnd($vector); // ResizableEnd
+    public function longestCommonPrefix($vector); // ShrinkableStart
+    public function longestCommonSuffix($vector); // ?
+    public function longestCommonSubset($vector); // ShrinkableEnd
+    public function pad($vector); // Growable
+    public function padStart($vector); // GrowableStart
+    public function padEnd($vector); // GrowableEnd
+    public function trim($vector); // Shrinkable
+    public function trimStart($vector); // ShrinkableStart
+    public function trimEnd($vector); // ShrinkableEnd
 
     public function replaceSubset($subset1, $subset2);
     public function countSubsets($subset);
     public function slice($start, $length);
     public function removeSlice($start, $length);
     public function splice($vector, $start, $length = 0);
-    public function chunk($size = null);
+    public function chunk($size = null); // ShrinkableStart
 
     public function join($glue = '');
     public function unique();
@@ -52,6 +48,8 @@ interface VectorExtras
     public function intersperse($value); // Insert a new value in between each existing value
     public function intersect($vector);
     public function difference($vector);
+    public function inits(); // ShrinkableEnd
+    public function tails(); // ShrinkableStart
 
     // Move out into subclass'
 

@@ -5,8 +5,7 @@ namespace Boosterpack\Contracts\Resizable;
 interface ShrinkableStart
 {
     /**
-     * @param mixed $item
-     * @return static
+     * @return Maybe[]|static[] [Maybe, static]
      */
-    public function shift($item);
+    public function unshift();
 }

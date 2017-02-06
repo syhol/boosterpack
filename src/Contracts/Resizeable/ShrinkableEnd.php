@@ -9,3 +9,4 @@ interface ShrinkableEnd
      */
     public function pop();
 }
+

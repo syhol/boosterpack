@@ -16,7 +16,7 @@ interface MappableIndex
      * @param callable $callable
      * @return static
      */
-    public function mapValues(callable $callable);
+    public function mapWithKeys(callable $callable);
 
     /**
      * @param callable $callable
