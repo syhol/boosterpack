@@ -15,6 +15,7 @@ use Boosterpack\Contracts\Fantasy\Monad;
 use Boosterpack\Contracts\Fantasy\Setoid;
 use Boosterpack\Contracts\Arrayable;
 use Boosterpack\Contracts\Sortable;
+use Countable;
 use JsonSerializable;
 use Traversable;
 

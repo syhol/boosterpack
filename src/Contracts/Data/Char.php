@@ -10,9 +10,9 @@ interface Char extends Orderable, Bounded, Enum
 {
     public function isAlpha();
     public function isNumeric();
-    public function isDigit();
     public function isBlank();
     public function isLetter();
+    public function isAscii();
     public function isLowerCase();
     public function isUpperCase();
     public function toLowerCase();

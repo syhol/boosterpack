@@ -1,61 +1,59 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: simon
- * Date: 03/02/17
- * Time: 00:30
- */
 
 namespace Boosterpack\Extras\Contracts\Data;
 
-
 interface VectorExtras
 {
-    // Functions or extras
+    // STABILIZEDish
+    public function startsWith($items); // ShrinkableStart
+    public function endsWith($items);  // ShrinkableEnd
+    public function ensureStart($items); // ResizableStart
+    public function ensureEnd($items); // ResizableEnd
+    public function removeStart($items); // ShrinkableStart
+    public function removeEnd($items); // ShrinkableEnd
+    public function pad($items); // Growable
+    public function padStart($items); // GrowableStart
+    public function padEnd($items); // GrowableEnd
+    public function trim($items); // Shrinkable
+    public function trimStart($items); // ShrinkableStart
+    public function trimEnd($items); // ShrinkableEnd
+
+    public function drop($condition); // Transformable                                        // Maybe infinite
+    public function take($condition); // Transformable (Maybe this is just a ShrinkableStart) // Never infinite
+    public function splitAt($condition); // Transformable                                     // Maybe infinite
+    public function span($condition); // Transformable                                        // ...
+    public function replaceSubset($subset1, $subset2); // Transformable
+    public function slice($start, $length); // Transformable
+    public function removeSlice($start, $length); // Transformable
+    public function splice($items, $start, $length = 0); // Transformable
+    public function chunk($size = null); // Transformable
+    public function unique(); // Transformable
+    public function subsets(); // Transformable             // All orders subsequent
+    public function subsequences(); // Transformable        // Same order, all possible lengths, may not be subsequent
+    public function permutations(); // Transformable        // Same length,  all possible different orders
+    public function intersperse($item); // Transformable    // Insert a new value in between each existing value
+    public function intersect($items); // Transformable
+    public function difference($items); // Transformable
+    public function group(); // Transformable
+
+    // UNSTABLE
     public function insert($index, $item); // Push everything to the right +!
-    public function append($item); // alias of GrowableStart
-    public function prepend($item); // alias of GrowableEnd
-    public function drop($condition); // ShrinkableStart
-    public function take($condition); // ShrinkableStart
-    public function startsWith($vector); // ShrinkableStart
-    public function endsWith($vector);  // ShrinkableEnd
-    public function ensureStart($vector); // ResizableStart
-    public function ensureEnd($vector); // ResizableEnd
-    public function removeStart($vector); // ResizableStart
-    public function removeEnd($vector); // ResizableEnd
-    public function longestCommonPrefix($vector); // ShrinkableStart
-    public function longestCommonSuffix($vector); // ?
-    public function longestCommonSubset($vector); // ShrinkableEnd
-    public function pad($vector); // Growable
-    public function padStart($vector); // GrowableStart
-    public function padEnd($vector); // GrowableEnd
-    public function trim($vector); // Shrinkable
-    public function trimStart($vector); // ShrinkableStart
-    public function trimEnd($vector); // ShrinkableEnd
 
-    public function replaceSubset($subset1, $subset2);
-    public function countSubsets($subset);
-    public function slice($start, $length);
-    public function removeSlice($start, $length);
-    public function splice($vector, $start, $length = 0);
-    public function chunk($size = null); // ShrinkableStart
+    public function countSubsets($subset); // ShrinkableStart  // Never infinite ?
+    public function inits(); // ShrinkableEnd                  // Never infinite ?
+    public function tails(); // ShrinkableStart                // Never infinite ?
 
-    public function join($glue = '');
-    public function unique();
-    public function subsets(); // All orders subsequent
-    public function subsequences(); // Same order, all possible lengths, may not be subsequent
-    public function permutations(); // Same length,  all possible different orders
-    public function intersperse($value); // Insert a new value in between each existing value
-    public function intersect($vector);
-    public function difference($vector);
-    public function inits(); // ShrinkableEnd
-    public function tails(); // ShrinkableStart
+    public function longestCommonPrefix($items); // ? ShrinkableStart
+    public function longestCommonSubset($items); // ? I DONT EVEN!!!!
+    public function longestCommonSuffix($items); // ? ShrinkableEnd
 
-    // Move out into subclass'
+    public function dropEnd($condition); // ? TransformableEnd
+    public function takeEnd($condition); // ? TransformableEnd
 
     public function flatten($level = null); // Monad extra
+    public function join($glue = ''); // Foldable
 
-    public function random(); // Sortable & Foldable extra
-    public function reverse(); // Sortable extra (i think?)
-    public function shuffle(); // Sortable extra
+    public function random(); // Sortable|Foldable extra
+    public function reverse(); // Sortable
+    public function shuffle(); // Sortable
 }

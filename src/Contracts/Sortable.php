@@ -9,4 +9,10 @@ interface Sortable
      * @return static
      */
     public function sort(callable $callable = null);
+
+    /**
+     * @param callable|null $callable
+     * @return static
+     */
+    public function reverse(callable $callable = null);
 }

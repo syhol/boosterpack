@@ -1,8 +1,10 @@
 <?php
+use Boosterpack\Contracts\Data\InfiniteList;
 
 /**
  * @param callable $callable
- * @param $initial
+ * @param mixed $initial
+ * @return InfiniteList
  */
 function iterate(callable $callable, $initial)
 {
@@ -12,7 +14,8 @@ function iterate(callable $callable, $initial)
 /**
  * @param callable $predicate
  * @param callable $transform
- * @param $initial
+ * @param mixed $initial
+ * @return InfiniteList
  */
 function until(callable $predicate, callable $transform, $initial)
 {
@@ -20,7 +23,8 @@ function until(callable $predicate, callable $transform, $initial)
 }
 
 /**
- * @param $item
+ * @param mixed $item
+ * @return InfiniteList
  */
 function repeat($item)
 {
@@ -28,9 +32,10 @@ function repeat($item)
 }
 
 /**
- * @param $vector
+ * @param \Traversable $items
+ * @return InfiniteList
  */
-function cycle($vector)
+function cycle($items)
 {
 
 }
