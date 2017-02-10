@@ -2,10 +2,13 @@
 
 namespace Boosterpack;
 
+use Boosterpack\Contracts\Data\Maybe;
+use Boosterpack\Maybe\Just;
+use Boosterpack\Maybe\Nothing;
 use Closure;
 
 /**
- * @param $item
+ * @param mixed $item
  * @return mixed
  */
 function id($item) {
@@ -13,7 +16,7 @@ function id($item) {
 }
 
 /**
- * @param $item
+ * @param mixed $item
  * @return Closure
  */
 function constant($item) {
@@ -25,4 +28,12 @@ function constant($item) {
  */
 function noop() {
     return function() {};
+}
+
+/**
+ * @param mixed $value
+ * @return Maybe
+ */
+function maybe($value) {
+    return is_null($value) ? new Nothing() : new Just($value);
 }
