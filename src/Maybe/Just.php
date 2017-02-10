@@ -52,7 +52,7 @@ class Just implements Maybe, Comonad
 
     public function orBind(callable $function)
     {
-        return $function();
+        return $this;
     }
 
     public function equals($other)
