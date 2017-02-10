@@ -1,5 +1,9 @@
 <?php
+
+namespace Boosterpack;
+
 use Boosterpack\Contracts\Data\InfiniteList;
+use Boosterpack\Data\Generator;
 
 /**
  * @param callable $callable
@@ -8,7 +12,11 @@ use Boosterpack\Contracts\Data\InfiniteList;
  */
 function iterate(callable $callable, $initial)
 {
-
+    return new Generator(function() use ($callable, $initial) {
+        while (true) {
+            yield $initial = $callable($initial);
+        }
+    });
 }
 
 /**
@@ -19,7 +27,11 @@ function iterate(callable $callable, $initial)
  */
 function until(callable $predicate, callable $transform, $initial)
 {
-
+    return new Generator(function() use ($predicate, $transform, $initial) {
+        while ($predicate($initial)) {
+            yield $initial = $transform($initial);
+        }
+    });
 }
 
 /**
@@ -28,7 +40,9 @@ function until(callable $predicate, callable $transform, $initial)
  */
 function repeat($item)
 {
-
+    return new Generator(function() use ($item) {
+        yield $item;
+    });
 }
 
 /**
@@ -37,5 +51,11 @@ function repeat($item)
  */
 function cycle($items)
 {
-
+    return new Generator(function() use ($items) {
+        while (true) {
+            foreach ($items as $item) {
+                yield $item;
+            }
+        }
+    });
 }

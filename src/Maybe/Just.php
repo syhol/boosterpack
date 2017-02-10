@@ -49,4 +49,9 @@ class Just implements Maybe, Comonad
     {
         return $function($this->value);
     }
+
+    public function equals($other)
+    {
+        return $other instanceof Just && $other->extract() === $this->value;
+    }
 }

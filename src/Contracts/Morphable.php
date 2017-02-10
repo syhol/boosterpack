@@ -6,7 +6,7 @@ use Boosterpack\Contracts\Fantasy\Monoid;
 use Boosterpack\Contracts\Resizable\GrowableEnd;
 use Boosterpack\Contracts\Resizable\ShrinkableStart;
 
-interface Transformable extends ShrinkableStart, GrowableEnd, Monoid
+interface Morphable extends ShrinkableStart, GrowableEnd, Monoid
 {
-    public function transform(callable $callable);
+    public function morph(callable $callable);
 }

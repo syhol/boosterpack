@@ -31,4 +31,9 @@ class Nothing implements Maybe
     {
         return $this;
     }
+
+    public function equals($other)
+    {
+        return $other instanceof Nothing;
+    }
 }

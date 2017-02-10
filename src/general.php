@@ -1,5 +1,9 @@
 <?php
 
+namespace Boosterpack;
+
+use Closure;
+
 /**
  * @param $item
  * @return mixed

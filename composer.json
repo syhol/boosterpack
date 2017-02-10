@@ -1,0 +1,26 @@
+{
+  "name": "syhol/boosterpack",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Simon Holloway",
+      "email": "simon@syhol.io"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Boosterpack\\": "src/"
+    },
+    "files": [
+      "src/general.php",
+      "src/function.php",
+      "src/generator.php",
+      "src/string.php"
+    ]
+  },
+  "require": {},
+  "require-dev": {
+    "kahlan/kahlan": "^3.1"
+  }
+}

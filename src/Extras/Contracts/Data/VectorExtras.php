@@ -17,24 +17,24 @@ interface VectorExtras
     public function trim($items); // Shrinkable
     public function trimStart($items); // ShrinkableStart
     public function trimEnd($items); // ShrinkableEnd
+    public function drop($condition); // ShrinkableStart
+    public function take($condition); // ShrinkableStart
 
-    public function drop($condition); // Transformable                                        // Maybe infinite
-    public function take($condition); // Transformable (Maybe this is just a ShrinkableStart) // Never infinite
-    public function splitAt($condition); // Transformable                                     // Maybe infinite
-    public function span($condition); // Transformable                                        // ...
-    public function replaceSubset($subset1, $subset2); // Transformable
-    public function slice($start, $length); // Transformable
-    public function removeSlice($start, $length); // Transformable
-    public function splice($items, $start, $length = 0); // Transformable
-    public function chunk($size = null); // Transformable
-    public function unique(); // Transformable
-    public function subsets(); // Transformable             // All orders subsequent
-    public function subsequences(); // Transformable        // Same order, all possible lengths, may not be subsequent
-    public function permutations(); // Transformable        // Same length,  all possible different orders
-    public function intersperse($item); // Transformable    // Insert a new value in between each existing value
-    public function intersect($items); // Transformable
-    public function difference($items); // Transformable
-    public function group(); // Transformable
+    public function splitAt($condition); // Morphable                                     // Maybe infinite
+    public function span($condition); // Morphable                                        // ...
+    public function replaceSubset($subset1, $subset2); // Morphable
+    public function slice($start, $length); // Morphable
+    public function removeSlice($start, $length); // Morphable
+    public function splice($items, $start, $length = 0); // Morphable
+    public function chunk($size = null); // Morphable
+    public function unique(); // Morphable
+    public function subsets(); // Morphable             // All orders subsequent
+    public function subsequences(); // Morphable        // Same order, all possible lengths, may not be subsequent
+    public function permutations(); // Morphable        // Same length,  all possible different orders
+    public function intersperse($item); // Morphable    // Insert a new value in between each existing value
+    public function intersect($items); // Morphable
+    public function difference($items); // Morphable
+    public function group(); // Morphable
 
     // UNSTABLE
     public function insert($index, $item); // Push everything to the right +!

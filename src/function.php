@@ -1,12 +1,11 @@
 <?php
 
-namespace Prelude;
+namespace Boosterpack;
 
 use Closure;
 use Exception;
 use ReflectionFunction;
 use ReflectionMethod;
-
 
 /**
  * @param callable $callable
