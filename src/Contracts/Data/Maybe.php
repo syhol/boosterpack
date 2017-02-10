@@ -10,10 +10,16 @@ use Boosterpack\Maybe\Just;
 interface Maybe extends Monad, Setoid, Arrayable
 {
     /**
+     * @param callable $callable
+     * @return Maybe
+     */
+    public function orBind(callable $callable);
+
+    /**
      * @param mixed $default
      * @return Just
      */
-    public function orValue($default);
+    public function orJust($default);
 
     /**
      * @param callable $callable

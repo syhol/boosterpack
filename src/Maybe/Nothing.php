@@ -17,7 +17,7 @@ class Nothing implements Maybe
         return $this;
     }
 
-    public function orValue($default)
+    public function orJust($default)
     {
         return new Just($default);
     }
@@ -30,6 +30,11 @@ class Nothing implements Maybe
     public function bind(callable $function)
     {
         return $this;
+    }
+
+    public function orBind(callable $function)
+    {
+        return new $function();
     }
 
     public function equals($other)

@@ -1,11 +1,11 @@
 <?php
 
-namespace Boosterpack\Maybe;
+namespace Boosterpack\Result;
 
-use Boosterpack\Contracts\Data\Maybe;
-use Boosterpack\Contracts\Fantasy\Comonad;
+use Boosterpack\Contracts\Data\Result;
+use Throwable;
 
-class Just implements Maybe, Comonad
+class Ok implements Result
 {
     /**
      * @var mixed
@@ -32,7 +32,7 @@ class Just implements Maybe, Comonad
 
     public function map(callable $function)
     {
-        return new Just($function($this->value));
+        return new Ok($function($this->value));
     }
 
     public function orValue($default)
@@ -40,9 +40,9 @@ class Just implements Maybe, Comonad
         return $this;
     }
 
-    public function orElse(callable $callable)
+    public function andValue($default)
     {
-        return $this;
+        return new Ok($default);
     }
 
     public function bind(callable $function)
@@ -50,13 +50,18 @@ class Just implements Maybe, Comonad
         return $function($this->value);
     }
 
-    public function orBind(callable $function)
-    {
-        return $function();
-    }
-
     public function equals($other)
     {
         return $other instanceof Just && $other->extract() === $this->value;
+    }
+
+    public function mapError(callable $callable)
+    {
+        // TODO: Implement mapError() method.
+    }
+
+    public function throwIt()
+    {
+        return $this;
     }
 }
