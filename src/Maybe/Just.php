@@ -45,9 +45,9 @@ class Just implements Maybe, Comonad
         return $this;
     }
 
-    public function bind(callable $function)
+    public function bind(callable $callable)
     {
-        return $function($this->value);
+        return $callable($this->value);
     }
 
     public function orBind(callable $function)

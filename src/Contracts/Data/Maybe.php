@@ -19,7 +19,7 @@ interface Maybe extends Monad, Setoid, Arrayable
      * @param mixed $default
      * @return Just
      */
-    public function orJust($default);
+    public function orValue($default);
 
     /**
      * @param callable $callable
