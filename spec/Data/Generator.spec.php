@@ -17,9 +17,6 @@ describe("Generators", function() {
             list($item2, $list3) = $list2->shift();
             list($item3, $list4) = $list2->shift();
 
-            list($item4) = $list3->shift();
-            list($item5) = $list4->shift();
-
             expect($item1)
                 ->not->toEqual($item2)
                 ->toEqual(new Just(1));
@@ -27,6 +24,9 @@ describe("Generators", function() {
             expect($item2)
                 ->toEqual($item3)
                 ->toEqual(new Just(2));
+
+            list($item4) = $list3->shift();
+            list($item5) = $list4->shift();
 
             expect($item3)
                 ->not->toEqual($item4)
@@ -43,19 +43,31 @@ describe("Generators", function() {
                 $a = 1; while ($a <= 20) yield $a++;
             });
 
-            $output1 = [];
-            foreach ($list as $item) {
-                $output1[] = $item;
-            }
-
-            $output2 = [];
-            foreach ($list as $item) {
-                $output2[] = $item;
-            }
+            $output1 = $output2 = [];
+            foreach ($list as $item) $output1[] = $item;
+            foreach ($list as $item) $output2[] = $item;
 
             expect($output1)
                 ->toEqual($output2)
                 ->toHaveLength(20);
+        });
+
+        it("can be iterated within an iteration of itself", function() {
+
+            $list = new Generator(function() {
+                $a = 1; while ($a <= 3) yield $a++;
+            });
+
+            $output = [];
+            foreach ($list as $level1) {
+                foreach ($list as $level2) {
+                    $output[] = $level1 + $level2;
+                }
+            }
+
+            expect($output)
+                ->toEqual([2, 3, 4, 3, 4, 5, 4, 5, 6])
+                ->toHaveLength(9);
         });
 
     });

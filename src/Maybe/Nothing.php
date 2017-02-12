@@ -17,6 +17,11 @@ class Nothing implements Maybe
         return $this;
     }
 
+    public function bind(callable $function)
+    {
+        return $this;
+    }
+
     public function orValue($default)
     {
         return new Just($default);
@@ -25,11 +30,6 @@ class Nothing implements Maybe
     public function orElse(callable $callable)
     {
         return new Just($callable());
-    }
-
-    public function bind(callable $function)
-    {
-        return $this;
     }
 
     public function orBind(callable $callable)

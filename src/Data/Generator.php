@@ -114,17 +114,18 @@ class Generator implements IteratorAggregate, InfiniteList
      */
     public function shift()
     {
-        return [$this->first(), $this->dropAmount(1)];
+        return [$this->head(), $this->tail()];
     }
 
     /**
      * @return static
      */
-    protected function dropAmount($size)
+    public function tail()
     {
-        return $this->transform(function (Traversable $traversable) use ($size) {
+        return $this->transform(function (Traversable $traversable) {
+            $count = 0;
             foreach ($traversable as $item) {
-                $size <= 0 ? yield $item : $size--;
+                $count > 0 ? yield $item : $count++;
             }
         });
     }
@@ -132,7 +133,7 @@ class Generator implements IteratorAggregate, InfiniteList
     /**
      * @return Maybe
      */
-    protected function first()
+    public function head()
     {
         $item = new Nothing;
 

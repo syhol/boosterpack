@@ -10,6 +10,7 @@ The missing php functions and structures
 * Remove `Boosterpack\Contracts\Data\Char`
 * Move `Boosterpack\Contracts\Data\String` and `Boosterpack\Contracts\Data\Maybe`
 * Do something better with `Boosterpack\Contracts\Data\Table`
+* Make `Boosterpack\Contracts\Morphable` better
 * Make resize interfaces bigger
     * `ShrinkableStart` to have `take`, `drop`, `head`, to extend `Traversable`
     * `ShrinkableEnd` to have `takeEnd`, `dropEnd`, `end`

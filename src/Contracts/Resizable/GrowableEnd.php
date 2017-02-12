@@ -6,7 +6,7 @@ interface GrowableEnd
 {
     /**
      * @param mixed $item
-     * @return static
+     * @return self
      */
     public function push($item);
 }
