@@ -19,7 +19,9 @@
       "src/string.php"
     ]
   },
-  "require": {},
+  "require": {
+
+  },
   "require-dev": {
     "kahlan/kahlan": "^3.1"
   }

@@ -3,6 +3,7 @@
 namespace Boosterpack\Contracts\Resizable;
 
 use Boosterpack\Contracts\Data\Maybe;
+use Boosterpack\Contracts\Data\Vector;
 use Boosterpack\Maybe\Just;
 use Closure;
 
@@ -23,6 +24,26 @@ public function drop($condition, ShrinkableStart $items)
     }
 
     return $items;
+}
+
+/**
+ * @param int|callable $condition
+ * @param ShrinkableStart $items
+ * @return Vector
+ */
+public function take($condition, ShrinkableStart $items)
+{
+    $predicate = is_integer($condition) ? trueNTimes($condition) : $condition;
+
+    $new = new Vector;
+    $item = $items->head();
+
+    while ($item instanceof Just && $predicate($item->extract())) {
+        $new->unshift($item->extract());
+        $item = $items->head();
+    }
+
+    return $new;
 }
 
 /**
