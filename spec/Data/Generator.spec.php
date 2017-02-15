@@ -16,6 +16,8 @@ describe("Generators", function() {
             list($item1, $list2) = $list1->shift();
             list($item2, $list3) = $list2->shift();
             list($item3, $list4) = $list2->shift();
+            $item4 = $list3->head();
+            $item5 = $list4->head();
 
             expect($item1)
                 ->not->toEqual($item2)
@@ -24,9 +26,6 @@ describe("Generators", function() {
             expect($item2)
                 ->toEqual($item3)
                 ->toEqual(new Just(2));
-
-            list($item4) = $list3->shift();
-            list($item5) = $list4->shift();
 
             expect($item3)
                 ->not->toEqual($item4)
@@ -84,24 +83,20 @@ describe("Generators", function() {
             $list2 = $list1->tail();
             $list3 = $list2->tail();
 
-            $item1 = $list1->head();
-            $item2 = $list2->head();
-            $item3 = $list3->head();
-
-            expect($item1->orValue(null)->extract())
+            expect($list1->head()->orValue(null)->extract())
                 ->toEqual(6);
 
-            expect($item2->orValue(null)->extract())
+            expect($list2->head()->orValue(null)->extract())
                 ->toEqual(7);
 
-            expect($item3->orValue(null)->extract())
+            expect($list3->head()->orValue(null)->extract())
                 ->toEqual(8);
         });
     });
 
     describe("->take", function() {
 
-        it("can take items", function() {
+        it("can drop then take items", function() {
 
             $list1 = new Generator(function() {
                 $a = 1; while (true) yield $a++;
@@ -109,9 +104,16 @@ describe("Generators", function() {
 
             expect($list1->drop(5)->take(3)->toArray())
                 ->toEqual([6, 7, 8]);
+        });
+
+        it("can take then drop items", function() {
+            
+            $list1 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
 
             expect($list1->take(10)->drop(4)->toArray())
-                ->toEqual([5,6,7,8,9,10]);
+                ->toEqual([5, 6, 7, 8, 9, 10]);
         });
     });
 });
