@@ -8,12 +8,12 @@ use Boosterpack\Contracts\Data\Vector;
 interface ShrinkableEnd
 {
     /**
-     * @return Maybe[]|self[] [Maybe, self]
+     * @return Maybe[]|static[] [Maybe, static]
      */
     public function pop();
 
     /**
-     * @return self
+     * @return static
      */
     public function init();
 
@@ -24,15 +24,9 @@ interface ShrinkableEnd
 
     /**
      * @param $count
-     * @return self
+     * @return static
      */
     public function dropEnd($count);
-
-    /**
-     * @param $condition
-     * @return self
-     */
-    public function dropEndWhile($condition);
 
     /**
      * @param $count
@@ -40,10 +34,5 @@ interface ShrinkableEnd
      */
     public function takeEnd($count);
 
-    /**
-     * @param $condition
-     * @return Vector
-     */
-    public function takeEndWhile($condition);
 }
 

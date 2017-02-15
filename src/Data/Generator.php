@@ -120,7 +120,7 @@ class Generator implements IteratorAggregate, InfiniteList
     }
 
     /**
-     * @return self
+     * @return static
      */
     public function tail()
     {
@@ -153,7 +153,7 @@ class Generator implements IteratorAggregate, InfiniteList
 
     /**
      * @param $count
-     * @return self
+     * @return static
      */
     public function drop($count)
     {
@@ -163,15 +163,6 @@ class Generator implements IteratorAggregate, InfiniteList
                 $current >= $count ? yield $item : $current++;
             }
         });
-    }
-
-    /**
-     * @param $condition
-     * @return self
-     */
-    public function dropWhile($condition)
-    {
-        // Not yet
     }
 
     /**
@@ -187,14 +178,5 @@ class Generator implements IteratorAggregate, InfiniteList
             $new = $new->push($item);
         }
         return $new;
-    }
-
-    /**
-     * @param $condition
-     * @return Vector
-     */
-    public function takeWhile($condition)
-    {
-        // Not yet
     }
 }

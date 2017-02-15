@@ -6,7 +6,7 @@ interface GrowableStart
 {
     /**
      * @param mixed $item
-     * @return self
+     * @return static
      */
     public function unshift($item);
 }

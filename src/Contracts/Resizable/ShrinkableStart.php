@@ -8,7 +8,7 @@ use Boosterpack\Contracts\Data\Vector;
 interface ShrinkableStart
 {
     /**
-     * @return Maybe[]|self[] [Maybe, self]
+     * @return Maybe[]|static[] [Maybe, static]
      */
     public function shift();
 
@@ -18,31 +18,19 @@ interface ShrinkableStart
     public function head();
 
     /**
-     * @return self
+     * @return static
      */
     public function tail();
 
     /**
      * @param $count
-     * @return self
+     * @return static
      */
     public function drop($count);
-
-    /**
-     * @param $condition
-     * @return self
-     */
-    public function dropWhile($condition);
 
     /**
      * @param $count
      * @return Vector
      */
     public function take($count);
-
-    /**
-     * @param $condition
-     * @return Vector
-     */
-    public function takeWhile($condition);
 }

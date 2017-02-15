@@ -102,7 +102,7 @@ class Vector implements IteratorAggregate, VectorInterface
     }
 
     /**
-     * @return self
+     * @return static
      */
     public function tail()
     {
@@ -135,27 +135,12 @@ class Vector implements IteratorAggregate, VectorInterface
 
     /**
      * @param $count
-     * @return self
+     * @return static
      */
     public function drop($count)
     {
         $new = $this->items;
         return new self(array_slice($new, $count));
-    }
-
-    /**
-     * @param $condition
-     * @return self
-     */
-    public function dropWhile($condition)
-    {
-        foreach ($this->items as $index => $item) {
-            if ($condition($item) === false) {
-                return $this->drop($index);
-            }
-        };
-
-        return new $this;
     }
 
     /**
@@ -166,21 +151,6 @@ class Vector implements IteratorAggregate, VectorInterface
     {
         $new = $this->items;
         return new self(array_slice($new, 0, $count));
-    }
-
-    /**
-     * @param $condition
-     * @return Vector
-     */
-    public function takeWhile($condition)
-    {
-        foreach ($this->items as $index => $item) {
-            if ($condition($item) === false) {
-                return $this->take($index);
-            }
-        };
-
-        return new $this;
     }
 
     /**
@@ -203,7 +173,7 @@ class Vector implements IteratorAggregate, VectorInterface
 
     /**
      * @param mixed $item
-     * @return self
+     * @return static
      */
     public function push($item)
     {
@@ -320,7 +290,7 @@ class Vector implements IteratorAggregate, VectorInterface
     }
 
     /**
-     * @return Maybe[]|self[] [Maybe, self]
+     * @return Maybe[]|static[] [Maybe, static]
      */
     public function pop()
     {
@@ -328,7 +298,7 @@ class Vector implements IteratorAggregate, VectorInterface
     }
 
     /**
-     * @return self
+     * @return static
      */
     public function init()
     {
@@ -345,20 +315,11 @@ class Vector implements IteratorAggregate, VectorInterface
 
     /**
      * @param $count
-     * @return self
+     * @return static
      */
     public function dropEnd($count)
     {
         // TODO: Implement dropEnd() method.
-    }
-
-    /**
-     * @param $condition
-     * @return self
-     */
-    public function dropEndWhile($condition)
-    {
-        // TODO: Implement dropEndWhile() method.
     }
 
     /**
@@ -368,15 +329,6 @@ class Vector implements IteratorAggregate, VectorInterface
     public function takeEnd($count)
     {
         // TODO: Implement takeEnd() method.
-    }
-
-    /**
-     * @param $condition
-     * @return VectorInterface
-     */
-    public function takeEndWhile($condition)
-    {
-        // TODO: Implement takeEndWhile() method.
     }
 
     /**
