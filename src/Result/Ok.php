@@ -3,7 +3,6 @@
 namespace Boosterpack\Result;
 
 use Boosterpack\Contracts\Data\Result;
-use Throwable;
 
 class Ok implements Result
 {
@@ -50,14 +49,19 @@ class Ok implements Result
         return $function($this->value);
     }
 
-    public function equals($other)
+    public function bindError(callable $callable)
     {
-        return $other instanceof Just && $other->extract() === $this->value;
+        return $this;
     }
 
     public function mapError(callable $callable)
     {
-        // TODO: Implement mapError() method.
+        return $this;
+    }
+
+    public function equals($other)
+    {
+        return $other instanceof self && $other->extract() === $this->value;
     }
 
     public function throwIt()

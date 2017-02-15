@@ -15,10 +15,4 @@ describe("Maybe", function() {
         expect(maybe(-1)->orValue(null)->extract())->toEqual(-1);
     });
 
-    it("can be mapped", function() {
-        (new Nothing)->map(function() {
-
-        });
-    });
-
 });

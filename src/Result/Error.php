@@ -2,7 +2,6 @@
 
 namespace Boosterpack\Result;
 
-use Boosterpack\Contracts\Data\Ok;
 use Boosterpack\Contracts\Data\Result;
 
 class Error implements Result
@@ -55,10 +54,16 @@ class Error implements Result
         return $this;
     }
 
+    public function bindError(callable $callable)
+    {
+        return $callable($this->value);
+    }
+
     public function equals($other)
     {
-        return $other instanceof Nothing;
+        return $other instanceof self && $other->extract() === $this->value;
     }
+
     public function throwIt()
     {
         throw $this->value;

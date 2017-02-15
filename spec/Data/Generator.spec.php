@@ -72,4 +72,46 @@ describe("Generators", function() {
 
     });
 
+    describe("->drop", function() {
+
+        it("can drop items", function() {
+
+            $list1 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+
+            $list1 = $list1->drop(5);
+            $list2 = $list1->tail();
+            $list3 = $list2->tail();
+
+            $item1 = $list1->head();
+            $item2 = $list2->head();
+            $item3 = $list3->head();
+
+            expect($item1->orValue(null)->extract())
+                ->toEqual(6);
+
+            expect($item2->orValue(null)->extract())
+                ->toEqual(7);
+
+            expect($item3->orValue(null)->extract())
+                ->toEqual(8);
+        });
+    });
+
+    describe("->take", function() {
+
+        it("can take items", function() {
+
+            $list1 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+
+            expect($list1->drop(5)->take(3)->toArray())
+                ->toEqual([6, 7, 8]);
+
+            expect($list1->take(10)->drop(4)->toArray())
+                ->toEqual([5,6,7,8,9,10]);
+        });
+    });
 });

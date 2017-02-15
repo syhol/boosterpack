@@ -4,6 +4,8 @@ namespace Boosterpack\Data;
 
 use Boosterpack\Contracts\Data\InfiniteList;
 use Boosterpack\Contracts\Data\Maybe;
+use Boosterpack\Contracts\Data\Vector;
+use Boosterpack\Data\Vector as StdVector;
 use Boosterpack\Maybe\Just;
 use Boosterpack\Maybe\Nothing;
 use EmptyIterator;
@@ -118,16 +120,11 @@ class Generator implements IteratorAggregate, InfiniteList
     }
 
     /**
-     * @return static
+     * @return self
      */
     public function tail()
     {
-        return $this->transform(function (Traversable $traversable) {
-            $count = 0;
-            foreach ($traversable as $item) {
-                $count > 0 ? yield $item : $count++;
-            }
-        });
+        return $this->drop(1);
     }
 
     /**
@@ -152,5 +149,52 @@ class Generator implements IteratorAggregate, InfiniteList
     public function getIterator()
     {
         return call_user_func($this->generatorFactory);
+    }
+
+    /**
+     * @param $count
+     * @return self
+     */
+    public function drop($count)
+    {
+        return $this->transform(function (Traversable $traversable) use ($count) {
+            $current = 0;
+            foreach ($traversable as $item) {
+                $current >= $count ? yield $item : $current++;
+            }
+        });
+    }
+
+    /**
+     * @param $condition
+     * @return self
+     */
+    public function dropWhile($condition)
+    {
+        // Not yet
+    }
+
+    /**
+     * @param $count
+     * @return Vector
+     */
+    public function take($count)
+    {
+        $new = new StdVector([]);
+        foreach ($this as $item) {
+            if ($count <= 0) break;
+            $count--;
+            $new = $new->push($item);
+        }
+        return $new;
+    }
+
+    /**
+     * @param $condition
+     * @return Vector
+     */
+    public function takeWhile($condition)
+    {
+        // Not yet
     }
 }

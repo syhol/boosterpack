@@ -16,7 +16,6 @@ use Boosterpack\Contracts\Fantasy\Setoid;
 use Boosterpack\Contracts\Arrayable;
 use Boosterpack\Contracts\Reversible;
 use Boosterpack\Contracts\Sortable;
-use Countable;
 use JsonSerializable;
 use Traversable;
 
@@ -25,7 +24,6 @@ interface StandardCollection extends
     Reversible,
     Setoid,
     Foldable,
-    Monoid,
     Monad,
     JsonSerializable,
     Arrayable,
