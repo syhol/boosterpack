@@ -5,34 +5,40 @@ namespace Boosterpack\Data;
 use Boosterpack\Contracts\Data\InfiniteList;
 use Boosterpack\Contracts\Data\Maybe;
 use Boosterpack\Contracts\Data\Vector;
+use Boosterpack\Data\CachedGenerator\BindCache;
+use Boosterpack\Data\CachedGenerator\CacheIterator;
+use Boosterpack\Data\CachedGenerator\ConcatCache;
+use Boosterpack\Data\CachedGenerator\MapCache;
+use Boosterpack\Data\CachedGenerator\OffsetCache;
+use Boosterpack\Data\CachedGenerator\GeneratorCache;
+use Boosterpack\Data\CachedGenerator\MutableCache;
+use Boosterpack\Data\CachedGenerator\NoopCache;
+use Boosterpack\Data\CachedGenerator\PrefixedCache;
 use Boosterpack\Data\Vector as StdVector;
 use Boosterpack\Maybe\Just;
 use Boosterpack\Maybe\Nothing;
-use EmptyIterator;
 use IteratorAggregate;
 use Traversable;
 
-class Generator implements IteratorAggregate, InfiniteList
+class CachedGenerator implements IteratorAggregate, InfiniteList
 {
     /**
-     * @var callable
+     * @var GeneratorCache
      */
-    private $generatorFactory;
+    private $cache;
 
     /**
      * Generator constructor.
-     * @param callable $generatorFactory
+     * @param GeneratorCache $cache
      */
-    public function __construct(callable $generatorFactory)
+    public function __construct(GeneratorCache $cache)
     {
-        $this->generatorFactory = $generatorFactory;
+        $this->cache = $cache;
     }
 
-    public function transform(callable $callable)
+    public static function fromGenerator(callable $generatorFactory)
     {
-        return new self(function() use ($callable) {
-            return $callable(call_user_func($this->generatorFactory));
-        });
+        return new self(new MutableCache($generatorFactory()));
     }
 
     /**
@@ -41,11 +47,7 @@ class Generator implements IteratorAggregate, InfiniteList
      */
     public function map(callable $function)
     {
-        return $this->transform(function(Traversable $traversable) use ($function) {
-            foreach ($traversable as $item) {
-                yield $function($item);
-            }
-        });
+        return new self(new MapCache($this->cache, $function));
     }
 
     /**
@@ -54,12 +56,7 @@ class Generator implements IteratorAggregate, InfiniteList
      */
     public function unshift($item)
     {
-        return $this->transform(function(Traversable $traversable) use ($item) {
-            yield $item;
-            foreach ($traversable as $item) {
-                yield $item;
-            }
-        });
+        return new self(new PrefixedCache($this->cache, [$item]));
     }
 
     /**
@@ -68,13 +65,7 @@ class Generator implements IteratorAggregate, InfiniteList
      */
     public function bind(callable $function)
     {
-        return $this->transform(function(Traversable $traversable) use ($function) {
-            foreach ($traversable as $item) {
-                foreach($function($item) as $returnedItem) {
-                    yield $returnedItem;
-                }
-            }
-        });
+        return new self(new BindCache($this->cache, $function));
     }
 
     /**
@@ -82,9 +73,7 @@ class Generator implements IteratorAggregate, InfiniteList
      */
     public static function fromEmpty()
     {
-        return new self(function() {
-            return new EmptyIterator();
-        });
+        return new self(new NoopCache());
     }
 
     /**
@@ -101,14 +90,13 @@ class Generator implements IteratorAggregate, InfiniteList
      */
     public function concat($value)
     {
-        return $this->transform(function (Traversable $traversable) use ($value) {
-            foreach ($traversable as $item) {
-                yield $item;
-            }
+        $generator = function() use ($value) {
             foreach ($value as $item) {
                 yield $item;
             }
-        });
+        };
+
+        return new self(new ConcatCache($this->cache, new MutableCache($generator())));
     }
 
     /**
@@ -142,13 +130,13 @@ class Generator implements IteratorAggregate, InfiniteList
         return $item;
     }
 
+
     /**
-     * Retrieve an external iterator
-     * @return Traversable
+     * @return CacheIterator
      */
     public function getIterator()
     {
-        return call_user_func($this->generatorFactory);
+        return new CacheIterator($this->cache);
     }
 
     /**
@@ -157,12 +145,7 @@ class Generator implements IteratorAggregate, InfiniteList
      */
     public function drop($count)
     {
-        return $this->transform(function (Traversable $traversable) use ($count) {
-            $current = 0;
-            foreach ($traversable as $item) {
-                $current >= $count ? yield $item : $current++;
-            }
-        });
+        return new self(new OffsetCache($this->cache, $count));
     }
 
     /**

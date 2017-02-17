@@ -9,5 +9,5 @@ use Traversable;
 
 interface InfiniteList extends Monoid, Monad, ResizableStart, Traversable
 {
-    public function transform(callable $callable);
+
 }
