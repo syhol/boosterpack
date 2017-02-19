@@ -2,6 +2,7 @@
 
 use Boosterpack\Data\CachedGenerator;
 use Boosterpack\Data\Generator;
+use Boosterpack\Data\Vector;
 use Boosterpack\Maybe\Just;
 
 describe("Generators", function() {
@@ -70,6 +71,47 @@ describe("Generators", function() {
                 ->toHaveLength(9);
         });
 
+        it("has functional parity with CacheGenerator", function() {
+
+            $fib = function() {
+                $i = 0;
+                $k = 1; //first fibonacci value
+                yield $k;
+                while(true)
+                {
+                    $k = $i + $k;
+                    $i = $k - $i;
+                    yield $k;
+                }
+            };
+
+            $nocache = new Generator($fib);
+            $cached = CachedGenerator::fromGenerator($fib);
+
+            $nocachedResults = $nocache->drop(50)
+                ->map(function($a) { return "this is $a."; })
+                ->bind(function($a) { return [$a, 'or is it?']; })
+                ->tail()
+                ->unshift('This is foobar.')
+                ->take(5);
+
+            $cachedResults = $cached->drop(50)
+                ->map(function($a) { return "this is $a."; })
+                ->bind(function($a) { return [$a, 'or is it?']; })
+                ->tail()
+                ->unshift('This is foobar.')
+                ->take(5);
+
+            expect($nocachedResults->toArray())
+                ->toEqual($cachedResults->toArray())
+                ->toEqual([
+                    'This is foobar.',
+                    'or is it?',
+                    'this is 32951280099.',
+                    'or is it?',
+                    'this is 53316291173.',
+                ]);
+        });
     });
 
     describe("->drop", function() {
@@ -120,36 +162,6 @@ describe("Generators", function() {
 
     describe("Cached Generators", function() {
 
-        it("can caches generator values", function() {
-
-             $fib = function() {
-                 $i = 0;
-                 $k = 1; //first fibonacci value
-                 yield $k;
-                 while(true)
-                 {
-                     $k = $i + $k;
-                     $i = $k - $i;
-                     yield $k;
-                 }
-            };
-
-            $nocache = new Generator($fib);
-            $cached = CachedGenerator::fromGenerator($fib);
-
-            $nocachedResults = $nocache->drop(1000)
-                ->map(function($a) { return "this is $a."; })
-                ->bind(function($a) { return [$a, 'or is it?']; })
-                ->take(10);
-
-            $cachedResults = $cached->drop(1000)
-                ->map(function($a) { return "this is $a."; })
-                ->bind(function($a) { return [$a, 'or is it?']; })
-                ->take(10);
-
-            var_dump($nocachedResults);
-            var_dump($cachedResults);
-        });
 
         it("can take then drop items", function() {
 

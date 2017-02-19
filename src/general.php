@@ -3,6 +3,7 @@
 namespace Boosterpack;
 
 use Boosterpack\Contracts\Data\Maybe;
+use Boosterpack\Contracts\Fantasy\Comonad;
 use Boosterpack\Maybe\Just;
 use Boosterpack\Maybe\Nothing;
 use Closure;
@@ -36,4 +37,13 @@ function noop() {
  */
 function maybe($value) {
     return is_null($value) ? new Nothing() : new Just($value);
+}
+
+/**
+ * @param $value
+ * @param $default
+ * @return mixed
+ */
+function extract($value, $default) {
+    return $value instanceof Comonad ? $value->extract() : $default ;
 }

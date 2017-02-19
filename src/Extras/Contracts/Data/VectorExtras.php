@@ -17,8 +17,6 @@ interface VectorExtras
     public function trim($items); // Shrinkable
     public function trimStart($items); // ShrinkableStart
     public function trimEnd($items); // ShrinkableEnd
-    public function drop($condition); // ShrinkableStart
-    public function take($condition); // ShrinkableStart
 
     public function splitAt($condition); // Morphable                                     // Maybe infinite
     public function span($condition); // Morphable                                        // ...
@@ -46,9 +44,6 @@ interface VectorExtras
     public function longestCommonPrefix($items); // ? ShrinkableStart
     public function longestCommonSubset($items); // ? I DONT EVEN!!!!
     public function longestCommonSuffix($items); // ? ShrinkableEnd
-
-    public function dropEnd($condition); // ? TransformableEnd
-    public function takeEnd($condition); // ? TransformableEnd
 
     public function flatten($level = null); // Monad extra
     public function join($glue = ''); // Foldable

@@ -4,7 +4,7 @@ namespace Boosterpack\Contracts\Indexed;
 
 use Boosterpack\Contracts\Data\Vector;
 
-interface MultiValueIndex
+interface NonUniqueValueIndex
 {
     /**
      * @param mixed $value

@@ -4,11 +4,11 @@ namespace Boosterpack\Contracts\Indexed;
 
 use Boosterpack\Contracts\Data\Vector;
 
-interface MultiKeyIndex
+interface NonUniqueKeyIndex
 {
     /**
      * @param mixed $index
      * @return Vector
      */
-    public function elementsAt($index);
+    public function valuesAt($index);
 }

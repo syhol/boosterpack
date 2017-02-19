@@ -4,6 +4,7 @@ namespace Boosterpack\Contracts\Resizable;
 
 use Boosterpack\Contracts\Data\Maybe;
 use Boosterpack\Contracts\Data\Vector;
+use Boosterpack\Data\Vector as StdVector;
 use Boosterpack\Maybe\Just;
 use Closure;
 
@@ -35,7 +36,7 @@ public function take($condition, ShrinkableStart $items)
 {
     $predicate = is_integer($condition) ? trueNTimes($condition) : $condition;
 
-    $new = new Vector;
+    $new = new StdVector;
     $item = $items->head();
 
     while ($item instanceof Just && $predicate($item->extract())) {

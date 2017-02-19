@@ -28,6 +28,15 @@ class Vector implements IteratorAggregate, VectorInterface
     }
 
     /**
+     * Retrieve an external iterator
+     * @return Traversable
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->items);
+    }
+
+    /**
      * @param callable $function
      * @return static
      */
@@ -38,17 +47,6 @@ class Vector implements IteratorAggregate, VectorInterface
             $new->push($function($item));
         }
         return $new;
-    }
-
-    /**
-     * @param mixed $item
-     * @return static
-     */
-    public function unshift($item)
-    {
-        $items = $this->items;
-        array_unshift($items, $item);
-        new self($items);
     }
 
     /**
@@ -64,6 +62,17 @@ class Vector implements IteratorAggregate, VectorInterface
             }
         }
         return $new;
+    }
+
+    /**
+     * @param mixed $item
+     * @return static
+     */
+    public function unshift($item)
+    {
+        $items = $this->items;
+        array_unshift($items, $item);
+        new self($items);
     }
 
     /**
@@ -122,15 +131,6 @@ class Vector implements IteratorAggregate, VectorInterface
         }
 
         return $item;
-    }
-
-    /**
-     * Retrieve an external iterator
-     * @return Traversable
-     */
-    public function getIterator()
-    {
-        return new ArrayIterator($this->items);
     }
 
     /**
@@ -350,15 +350,6 @@ class Vector implements IteratorAggregate, VectorInterface
     }
 
     /**
-     * @param mixed $index
-     * @return Maybe
-     */
-    public function elementAt($index)
-    {
-        // TODO: Implement elementAt() method.
-    }
-
-    /**
      * Specify data which should be serialized to JSON
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
@@ -368,5 +359,32 @@ class Vector implements IteratorAggregate, VectorInterface
     function jsonSerialize()
     {
         // TODO: Implement jsonSerialize() method.
+    }
+
+    /**
+     * @param mixed $value
+     * @return boolean
+     */
+    public function hasKey($value)
+    {
+        // TODO: Implement hasKey() method.
+    }
+
+    /**
+     * @param mixed $value
+     * @return boolean
+     */
+    public function hasValue($value)
+    {
+        // TODO: Implement hasValue() method.
+    }
+
+    /**
+     * @param mixed $index
+     * @return Maybe
+     */
+    public function valueAt($index)
+    {
+        // TODO: Implement valueAt() method.
     }
 }

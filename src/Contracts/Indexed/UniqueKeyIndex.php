@@ -10,5 +10,5 @@ interface UniqueKeyIndex
      * @param mixed $index
      * @return Maybe
      */
-    public function elementAt($index);
+    public function valueAt($index);
 }
