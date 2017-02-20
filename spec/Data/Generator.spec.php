@@ -172,5 +172,45 @@ describe("Generators", function() {
             expect($list1->take(10)->drop(4)->toArray())
                 ->toEqual([5, 6, 7, 8, 9, 10]);
         });
+
+        it("compares Generator with CachedGenerator with memorizedGenrator", function() {
+
+            $func = function() {
+                $a = 1; while ($a <= 20) {
+                    echo "test $a";
+                    yield $a++;
+                }
+            };
+
+            $generator = new Generator($func);
+            $cached = CachedGenerator::fromGenerator($func);
+            $memorized = \Boosterpack\memorizeGenerator($func);
+
+            expect([$generator, 'head'])->toEcho('test 1');
+            expect([$generator, 'head'])->toEcho('test 1');
+
+            expect([$cached, 'head'])->toEcho('test 1');
+            expect([$cached, 'head'])->not->toEcho('test 1');
+
+            expect([$memorized, 'head'])->toEcho('test 1');
+            expect([$memorized, 'head'])->not->toEcho('test 1');
+        });
+
+        it("memorizedGenrator is all the things", function() {
+
+            $func = function() {
+                $a = 1; while ($a <= 20) {
+                    yield $a++;
+                }
+            };
+
+            $memorized = \Boosterpack\memorizeGenerator($func);
+
+            expect($memorized->head()->orValue(null)->extract())->toEqual(1);
+            expect($memorized->tail()->head()->orValue(null)->extract())->toEqual(2);
+
+            expect($memorized->take(5)->toArray())->toEqual([1, 2, 3, 4, 5]);
+            expect($memorized->drop(3)->take(5)->toArray())->toEqual([4, 5, 6, 7, 8]);
+        });
     });
 });

@@ -22,13 +22,17 @@ class MutableCache implements GeneratorCache
     private $isFinished = false;
 
     /**
-     * MutableCache constructor.
-     * @param Generator $generator
+     * @var callable
      */
-    public function __construct(Generator $generator)
+    private $generatorFactory;
+
+    /**
+     * MutableCache constructor.
+     * @param callable $generatorFactory
+     */
+    public function __construct(callable $generatorFactory)
     {
-        $this->generator = $generator;
-        $this->cache[] = $this->generator->current();
+        $this->generatorFactory = $generatorFactory;
     }
 
     /**
@@ -62,7 +66,11 @@ class MutableCache implements GeneratorCache
 
     private function next()
     {
-        $this->generator->next();
+        if (is_null($this->generator)) {
+            $this->generator = call_user_func($this->generatorFactory);
+        } else {
+            $this->generator->next();
+        }
 
         if ($this->generator->valid()) {
             $this->cache[] = $this->generator->current();

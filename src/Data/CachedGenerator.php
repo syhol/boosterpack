@@ -38,7 +38,7 @@ class CachedGenerator implements IteratorAggregate, InfiniteList
 
     public static function fromGenerator(callable $generatorFactory)
     {
-        return new self(new MutableCache($generatorFactory()));
+        return new self(new MutableCache($generatorFactory));
     }
 
     /**
@@ -96,7 +96,7 @@ class CachedGenerator implements IteratorAggregate, InfiniteList
             }
         };
 
-        return new self(new ConcatCache($this->cache, new MutableCache($generator())));
+        return new self(new ConcatCache($this->cache, new MutableCache($generator)));
     }
 
     /**
