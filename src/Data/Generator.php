@@ -28,6 +28,10 @@ class Generator implements IteratorAggregate, InfiniteList
         $this->generatorFactory = $generatorFactory;
     }
 
+    /**
+     * @param callable $callable
+     * @return Generator
+     */
     public function transform(callable $callable)
     {
         return new self(function() use ($callable) {
@@ -49,20 +53,6 @@ class Generator implements IteratorAggregate, InfiniteList
     }
 
     /**
-     * @param mixed $item
-     * @return static
-     */
-    public function unshift($item)
-    {
-        return $this->transform(function(Traversable $traversable) use ($item) {
-            yield $item;
-            foreach ($traversable as $item) {
-                yield $item;
-            }
-        });
-    }
-
-    /**
      * @param callable $function
      * @return static
      */
@@ -73,6 +63,20 @@ class Generator implements IteratorAggregate, InfiniteList
                 foreach($function($item) as $returnedItem) {
                     yield $returnedItem;
                 }
+            }
+        });
+    }
+
+    /**
+     * @param mixed $item
+     * @return static
+     */
+    public function unshift($item)
+    {
+        return $this->transform(function(Traversable $traversable) use ($item) {
+            yield $item;
+            foreach ($traversable as $item) {
+                yield $item;
             }
         });
     }
@@ -143,15 +147,6 @@ class Generator implements IteratorAggregate, InfiniteList
     }
 
     /**
-     * Retrieve an external iterator
-     * @return Traversable
-     */
-    public function getIterator()
-    {
-        return call_user_func($this->generatorFactory);
-    }
-
-    /**
      * @param $count
      * @return static
      */
@@ -181,5 +176,14 @@ class Generator implements IteratorAggregate, InfiniteList
             if ($count <= 0) break;
         }
         return $new;
+    }
+
+    /**
+     * Retrieve an external iterator
+     * @return Traversable
+     */
+    public function getIterator()
+    {
+        return call_user_func($this->generatorFactory);
     }
 }

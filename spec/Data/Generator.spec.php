@@ -4,6 +4,7 @@ use Boosterpack\Data\CachedGenerator;
 use Boosterpack\Data\Generator;
 use Boosterpack\Data\Vector;
 use Boosterpack\Maybe\Just;
+use Boosterpack\Maybe\Nothing;
 
 describe("Generators", function() {
 
@@ -71,7 +72,7 @@ describe("Generators", function() {
                 ->toHaveLength(9);
         });
 
-        it("has functional parity with CacheGenerator", function() {
+        it("has functional parity with a memorized generator", function() {
 
             $fib = function() {
                 $i = 0;
@@ -86,7 +87,7 @@ describe("Generators", function() {
             };
 
             $nocache = new Generator($fib);
-            $cached = CachedGenerator::fromGenerator($fib);
+            $cached = \Boosterpack\memorizeGenerator($fib);
 
             $nocachedResults = $nocache->drop(50)
                 ->map(function($a) { return "this is $a."; })
@@ -114,66 +115,26 @@ describe("Generators", function() {
         });
     });
 
-    describe("->drop", function() {
-
-        it("can drop items", function() {
-
-            $list1 = new Generator(function() {
-                $a = 1; while (true) yield $a++;
-            });
-
-            $list1 = $list1->drop(5);
-            $list2 = $list1->tail();
-            $list3 = $list2->tail();
-
-            expect($list1->head()->orValue(null)->extract())
-                ->toEqual(6);
-
-            expect($list2->head()->orValue(null)->extract())
-                ->toEqual(7);
-
-            expect($list3->head()->orValue(null)->extract())
-                ->toEqual(8);
-        });
-    });
-
-    describe("->take", function() {
-
-        it("can drop then take items", function() {
-
-            $list1 = new Generator(function() {
-                $a = 1; while (true) yield $a++;
-            });
-
-            expect($list1->drop(5)->take(3)->toArray())
-                ->toEqual([6, 7, 8]);
-        });
-
-        it("can take then drop items", function() {
-            
-            $list1 = new Generator(function() {
-                $a = 1; while (true) yield $a++;
-            });
-
-            expect($list1->take(10)->drop(4)->toArray())
-                ->toEqual([5, 6, 7, 8, 9, 10]);
-        });
-    });
-
     describe("Cached Generators", function() {
 
-
         it("can take then drop items", function() {
 
             $list1 = new Generator(function() {
                 $a = 1; while (true) yield $a++;
             });
 
+            $list2 = \Boosterpack\memorizeGenerator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+
             expect($list1->take(10)->drop(4)->toArray())
+                ->toEqual([5, 6, 7, 8, 9, 10]);
+
+            expect($list2->take(10)->drop(4)->toArray())
                 ->toEqual([5, 6, 7, 8, 9, 10]);
         });
 
-        it("compares Generator with CachedGenerator with memorizedGenrator", function() {
+        it("won't run the generator when the same head is requested twice", function() {
 
             $func = function() {
                 $a = 1; while ($a <= 20) {
@@ -183,20 +144,16 @@ describe("Generators", function() {
             };
 
             $generator = new Generator($func);
-            $cached = CachedGenerator::fromGenerator($func);
             $memorized = \Boosterpack\memorizeGenerator($func);
 
             expect([$generator, 'head'])->toEcho('test 1');
             expect([$generator, 'head'])->toEcho('test 1');
 
-            expect([$cached, 'head'])->toEcho('test 1');
-            expect([$cached, 'head'])->not->toEcho('test 1');
-
             expect([$memorized, 'head'])->toEcho('test 1');
             expect([$memorized, 'head'])->not->toEcho('test 1');
         });
 
-        it("memorizedGenrator is all the things", function() {
+        it("only gets the next value when it needs it", function() {
 
             $currentIteration = 0;
             $func = function() use(&$currentIteration) {
@@ -220,6 +177,305 @@ describe("Generators", function() {
             expect($currentIteration)->toEqual(5);
             expect($memorized->drop(3)->take(5)->toArray())->toEqual([4, 5, 6, 7, 8]);
             expect($currentIteration)->toEqual(8);
+        });
+    });
+
+    describe("::fromEmpty", function() {
+
+        it("returns an empty collection", function() {
+
+            $list1 = Generator::fromEmpty();
+
+            expect($list1->head())
+                ->toBeAnInstanceOf(Nothing::class);
+        });
+    });
+
+    describe("->getEmpty", function() {
+
+        it("returns a just with the first item in the collection", function() {
+
+            $list1 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+
+            expect($list1->head())
+                ->toBeAnInstanceOf(Just::class);
+
+            expect($list1->getEmpty()->head())
+                ->toBeAnInstanceOf(Nothing::class);
+        });
+    });
+
+    describe("->head", function() {
+
+        it("returns a just with the first item in the collection", function() {
+
+            $list1 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+
+            expect($list1->head())
+                ->toBeAnInstanceOf(Just::class);
+
+            expect($list1->head()->orValue(null)->extract())
+                ->toEqual(1);
+        });
+
+        it("returns a nothing from an empty collection", function() {
+
+            $list1 = new Generator(function() {
+                yield 1;
+            });
+
+            expect($list1->tail()->head())
+                ->toBeAnInstanceOf(Nothing::class);
+        });
+    });
+
+    describe("->tail", function() {
+
+        it("returns a collection with one less item", function() {
+
+            $list1 = new Generator(function() {
+                foreach (range(1, 3) as $a) yield $a;
+            });
+
+            expect($list1->take(3)->toArray())
+                ->toEqual([1, 2, 3]);
+
+            expect($list1->tail()->take(3)->toArray())
+                ->toEqual([2, 3]);
+
+            expect($list1->tail()->tail()->take(3)->toArray())
+                ->toEqual([3]);
+
+            expect($list1->tail()->tail()->tail()->take(3)->toArray())
+                ->toEqual([]);
+        });
+
+        it("returns an empty collection when it is already empty or when it only has one", function() {
+
+            $list1 = new Generator(function() {
+                yield 1;
+            });
+
+            expect($list1->head())
+                ->toBeAnInstanceOf(Just::class);
+
+            expect($list1->tail()->head())
+                ->toBeAnInstanceOf(Nothing::class);
+        });
+    });
+
+    describe("->drop", function() {
+
+        it("can drop items", function() {
+
+            $list1 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+
+            $list1 = $list1->drop(5);
+            $list2 = $list1->tail();
+            $list3 = $list2->tail();
+
+            expect($list1->head()->orValue(null)->extract())
+                ->toEqual(6);
+
+            expect($list2->head()->orValue(null)->extract())
+                ->toEqual(7);
+
+            expect($list3->head()->orValue(null)->extract())
+                ->toEqual(8);
+        });
+
+        it("can drop more items than it has, and results in an empty collection", function() {
+
+            $list1 = new Generator(function() {
+                foreach (range(1, 5) as $a) yield $a;
+            });
+
+            expect($list1->drop(3)->take(2)->toArray())
+                ->toEqual([4, 5]);
+
+            expect($list1->drop(3)->head())
+                ->toBeAnInstanceOf(Just::class);
+
+            expect($list1->drop(6)->take(2)->toArray())
+                ->toEqual([]);
+
+            expect($list1->drop(6)->head())
+                ->toBeAnInstanceOf(Nothing::class);
+        });
+    });
+
+    describe("->take", function() {
+
+        it("can drop then take items", function() {
+
+            $list1 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+
+            expect($list1->drop(5)->take(3)->toArray())
+                ->toEqual([6, 7, 8]);
+        });
+
+        it("can take then drop items", function() {
+
+            $list1 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+
+            expect($list1->take(10)->drop(4)->toArray())
+                ->toEqual([5, 6, 7, 8, 9, 10]);
+        });
+    });
+
+    describe("->unshift", function() {
+
+        it("can add items to a collection", function() {
+
+            $list1 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+
+            $list2 = $list1->unshift('foo')->unshift('bar');
+
+            expect($list2->take(4)->toArray())
+                ->toEqual(['bar', 'foo', 1, 2]);
+        });
+
+        it("can add items to an empty collection", function() {
+
+            $list1 = new Generator(function() {
+                yield 1;
+            });
+
+            expect($list1->tail()->unshift('foo')->unshift('bar')->take(3)->toArray())
+                ->toEqual(['bar', 'foo']);
+        });
+    });
+
+    describe("->shift", function() {
+
+        it("can return the head and tail on a normal generator", function() {
+
+            $list1 = new Generator(function() {
+                foreach (range(1, 9) as $a) yield $a;
+            });
+
+            list($head, $tail) = $list1->shift();
+
+            expect($list1->head())
+                ->toEqual($head)
+                ->toEqual(new Just(1));
+
+            expect($tail->take(20)->toArray())
+                ->toEqual($tail->take(20)->toArray())
+                ->toEqual([2,3,4,5,6,7,8,9]);
+        });
+
+        it("returns a nothing from an empty collection", function() {
+
+            $list1 = new Generator(function() {
+                yield 1;
+            });
+
+            list($head, $tail) = $list1->tail()->shift();
+
+            expect($head)
+                ->toBeAnInstanceOf(Nothing::class);
+
+            expect($tail->take(1)->toArray())
+                ->toEqual([]);
+        });
+    });
+
+    describe("->map", function() {
+
+        it("can map values", function() {
+
+            $list1 = new Generator(function() {
+                foreach (range(1, 5) as $a) yield $a;
+            });
+
+            expect($list1->map(function ($x) { return $x * 2; })->take(10)->toArray())
+                ->toEqual([2, 4, 6, 8, 10]);
+        });
+
+        it("will not map anything if there are no values", function() {
+
+            $list1 = new Generator(function() {
+                yield 1;
+            });
+
+            $list1 = $list1->tail();
+
+            $mapper = function ($x) { return $x * 2; };
+            expect($list1->map($mapper)->take(10)->toArray())
+                ->toEqual([]);
+        });
+    });
+
+    describe("->bind", function() {
+
+        it("can bind values", function() {
+
+            $list1 = new Generator(function() {
+                foreach (range(1, 8) as $a) yield $a;
+            });
+
+            $binder = function ($x) { return $x % 2 === 0 ? [$x, $x] : []; };
+            expect($list1->bind($binder)->take(10)->toArray())
+                ->toEqual([2, 2, 4, 4, 6, 6, 8, 8]);
+        });
+    });
+
+    describe("->concat", function() {
+
+        it("can combine two generators", function() {
+
+            $list1 = new Generator(function() {
+                foreach (range(1, 4) as $a) yield $a;
+            });
+            $list2 = new Generator(function() {
+                foreach (range(5, 8) as $a) yield $a;
+            });
+
+            expect($list1->concat($list2)->take(10)->toArray())
+                ->toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+        });
+
+        it("can combine a generator and an infinite generator", function() {
+
+            $list1 = new Generator(function() {
+                foreach (range(1, 4) as $a) yield $a;
+            });
+            $list2 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+
+            expect($list1->concat($list2)->take(10)->toArray())
+                ->toEqual([1, 2, 3, 4, 1, 2, 3, 4, 5, 6]);
+        });
+    });
+
+    describe("Iteration", function() {
+
+        it("can iterate", function () {
+
+            $list1 = new Generator(function() {
+                foreach (range(1, 4) as $a) yield $a;
+            });
+
+            $list2 = [1, 2, 3, 4];
+
+            foreach ($list1 as $key => $item) {
+                expect($item)
+                    ->toEqual($list2[$key]);
+            }
         });
     });
 });
