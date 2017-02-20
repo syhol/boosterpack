@@ -172,10 +172,13 @@ class Generator implements IteratorAggregate, InfiniteList
     public function take($count)
     {
         $new = new StdVector([]);
+        if ($count < 0) {
+            return $new;
+        }
         foreach ($this as $item) {
-            if ($count <= 0) break;
-            $count--;
             $new = $new->push($item);
+            $count--;
+            if ($count <= 0) break;
         }
         return $new;
     }

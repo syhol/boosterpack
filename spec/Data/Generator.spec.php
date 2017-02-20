@@ -198,19 +198,28 @@ describe("Generators", function() {
 
         it("memorizedGenrator is all the things", function() {
 
-            $func = function() {
+            $currentIteration = 0;
+            $func = function() use(&$currentIteration) {
                 $a = 1; while ($a <= 20) {
+                    $currentIteration++;
                     yield $a++;
                 }
             };
 
             $memorized = \Boosterpack\memorizeGenerator($func);
 
+            expect($currentIteration)->toEqual(0);
             expect($memorized->head()->orValue(null)->extract())->toEqual(1);
+            expect($currentIteration)->toEqual(1);
             expect($memorized->tail()->head()->orValue(null)->extract())->toEqual(2);
+            expect($currentIteration)->toEqual(2);
+            expect($memorized->take(2)->toArray())->toEqual([1, 2]);
+            expect($currentIteration)->toEqual(2);
 
             expect($memorized->take(5)->toArray())->toEqual([1, 2, 3, 4, 5]);
+            expect($currentIteration)->toEqual(5);
             expect($memorized->drop(3)->take(5)->toArray())->toEqual([4, 5, 6, 7, 8]);
+            expect($currentIteration)->toEqual(8);
         });
     });
 });
