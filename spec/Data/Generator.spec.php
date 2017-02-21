@@ -87,7 +87,7 @@ describe("Generators", function() {
             };
 
             $nocache = new Generator($fib);
-            $cached = \Boosterpack\memorizeGenerator($fib);
+            $cached = (new Generator($fib))->memorize();
 
             $nocachedResults = $nocache->drop(50)
                 ->map(function($a) { return "this is $a."; })
@@ -123,9 +123,9 @@ describe("Generators", function() {
                 $a = 1; while (true) yield $a++;
             });
 
-            $list2 = \Boosterpack\memorizeGenerator(function() {
+            $list2 = (new Generator(function() {
                 $a = 1; while (true) yield $a++;
-            });
+            }))->memorize();
 
             expect($list1->take(10)->drop(4)->toArray())
                 ->toEqual([5, 6, 7, 8, 9, 10]);
@@ -144,7 +144,7 @@ describe("Generators", function() {
             };
 
             $generator = new Generator($func);
-            $memorized = \Boosterpack\memorizeGenerator($func);
+            $memorized = (new Generator($func))->memorize();
 
             expect([$generator, 'head'])->toEcho('test 1');
             expect([$generator, 'head'])->toEcho('test 1');
@@ -163,7 +163,7 @@ describe("Generators", function() {
                 }
             };
 
-            $memorized = \Boosterpack\memorizeGenerator($func);
+            $memorized = (new Generator($func))->memorize();
 
             expect($currentIteration)->toEqual(0);
             expect($memorized->head()->orValue(null)->extract())->toEqual(1);

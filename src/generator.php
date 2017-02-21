@@ -59,28 +59,3 @@ function cycle($items)
         }
     });
 }
-
-/**
- * @param callable $generatorFactory
- * @return Generator
- */
-function memorizeGenerator(callable $generatorFactory)
-{
-    return new Generator(function() use ($generatorFactory) {
-        static $cache = [];
-        static $generator = null;
-        foreach ($cache as $item) {
-            yield $item;
-        }
-        if (is_null($generator)) {
-            $generator = $generatorFactory() ;
-            if ($generator->valid()) {
-                yield $cache[] = $generator->current();
-            }
-        }
-        while ($generator->valid()) {
-            $generator->next();
-            yield $cache[] = $generator->current();
-        }
-    });
-}

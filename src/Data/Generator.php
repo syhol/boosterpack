@@ -180,7 +180,32 @@ class Generator implements IteratorAggregate, InfiniteList
 
     /**
      * Retrieve an external iterator
-     * @return Traversable
+     * @return static
+     */
+    public function memorize()
+    {
+        return new self(function () {
+            static $cache = [];
+            static $iterator = null;
+            foreach ($cache as $item) {
+                yield $item;
+            }
+            if (is_null($iterator)) {
+                $iterator = $this->getIterator();
+                if ($iterator->valid()) {
+                    yield $cache[] = $iterator->current();
+                }
+            }
+            while ($iterator->valid()) {
+                $iterator->next();
+                yield $cache[] = $iterator->current();
+            }
+        });
+    }
+
+    /**
+     * Retrieve an external iterator
+     * @return \Generator
      */
     public function getIterator()
     {
