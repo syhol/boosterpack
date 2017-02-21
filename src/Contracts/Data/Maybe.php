@@ -26,4 +26,10 @@ interface Maybe extends Monad, Setoid, Arrayable
      * @return Just
      */
     public function orElse(callable $callable);
+
+    /**
+     * @param string $message the exception message to use when throwing
+     * @return mixed
+     */
+    public function expect($message);
 }

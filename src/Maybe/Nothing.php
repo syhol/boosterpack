@@ -41,4 +41,9 @@ class Nothing implements Maybe
     {
         return $other instanceof Nothing;
     }
+
+    public function expect($message)
+    {
+        throw new \UnexpectedValueException($message);
+    }
 }

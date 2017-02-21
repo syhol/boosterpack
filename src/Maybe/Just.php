@@ -59,4 +59,9 @@ class Just implements Maybe, Comonad
     {
         return $other instanceof Just && $other->extract() === $this->value;
     }
+
+    public function expect($message)
+    {
+        return $this->value;
+    }
 }
