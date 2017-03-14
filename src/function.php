@@ -165,13 +165,26 @@ function setArity(callable $callable, $arity) {
 
 /**
  * @param callable $callable
+ * @param array $params
+ * @return callable|Closure
+ */
+function partial(callable $callable, array $params) {
+    return function (...$extraParams) use ($callable, $params) {
+        return $callable(array_merge($params, $extraParams));
+    };
+}
+
+/**
+ * @param callable $callable
+ * @param array $params
  * @param null $count
  * @return callable|Closure
  */
-function curry(callable $callable, $count = null) {
+function curry(callable $callable, array $params = [], $count = null) {
     $count = is_null($count) ? getArity($callable) : $count;
-    return $count === 0 ? $callable : function (...$params) use($callable, $count) {
-        $partial = invoke(partial(...$params), $callable); /** @type $partial callable */
-        return count($params) >= $count ? $partial() : curry($partial, $count - count($params));
+    $curry = function (...$params) use($callable, $count) {
+        $partial = partial($callable, $params); /** @type callable $partial */
+        return count($params) >= $count ? $partial() : curry($partial, [], $count - count($params));
     };
+    return $curry(...$params);
 }

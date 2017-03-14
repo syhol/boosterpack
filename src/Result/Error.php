@@ -39,22 +39,17 @@ class Error implements Result
         return new Ok($default);
     }
 
-    public function andValue($default)
-    {
-        return $this;
-    }
-
     public function mapError(callable $callable)
     {
         return $callable($this->value);
     }
 
-    public function bind(callable $function)
+    public function flatMap(callable $function)
     {
         return $this;
     }
 
-    public function bindError(callable $callable)
+    public function flatMapError(callable $callable)
     {
         return $callable($this->value);
     }

@@ -3,10 +3,8 @@
 namespace Boosterpack\Contracts\Resizable;
 
 use Boosterpack\Contracts\Data\Maybe;
-use Boosterpack\Contracts\Data\Vector;
-use Boosterpack\Data\Vector as StdVector;
+use Boosterpack\Data\Vector;
 use Boosterpack\Maybe\Just;
-use Closure;
 
 /**
  * @param int|callable $condition
@@ -36,7 +34,7 @@ public function take($condition, ShrinkableStart $items)
 {
     $predicate = is_integer($condition) ? trueNTimes($condition) : $condition;
 
-    $new = new StdVector;
+    $new = new Vector;
     $item = $items->head();
 
     while ($item instanceof Just && $predicate($item->extract())) {
@@ -57,6 +55,15 @@ public function trueNTimes($amount)
     return function () use ($count, $amount) {
         return ++$count >= $amount;
     };
+}
+
+/**
+ * @param ShrinkableStart $items
+ * @return Maybe[]|ShrinkableStart[] [Maybe, self]
+ */
+public function pop(ShrinkableEnd $items)
+{
+    return $items->pop();
 }
 
 /**

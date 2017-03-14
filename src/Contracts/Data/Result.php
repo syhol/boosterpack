@@ -22,19 +22,13 @@ interface Result extends Monad, Setoid, Arrayable, Comonad
      * @param callable $callable
      * @return Result
      */
-    public function bindError(callable $callable);
+    public function flatMapError(callable $callable);
 
     /**
      * @param mixed $default
      * @return Ok
      */
     public function orValue($default);
-
-    /**
-     * @param mixed $default
-     * @return Ok
-     */
-    public function andValue($default);
 
     /**
      * @throws Throwable

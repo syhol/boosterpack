@@ -39,17 +39,12 @@ class Ok implements Result
         return $this;
     }
 
-    public function andValue($default)
-    {
-        return new Ok($default);
-    }
-
-    public function bind(callable $function)
+    public function flatMap(callable $function)
     {
         return $function($this->value);
     }
 
-    public function bindError(callable $callable)
+    public function flatMapError(callable $callable)
     {
         return $this;
     }

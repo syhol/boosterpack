@@ -8,5 +8,5 @@ interface Monad extends Functor
      * @param callable $function
      * @return static
      */
-    public function bind(callable $function);
+    public function flatMap(callable $function);
 }

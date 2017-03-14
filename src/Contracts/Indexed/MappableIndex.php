@@ -11,16 +11,4 @@ interface MappableIndex
      * @return static
      */
     public function mapAt($index, callable $callable);
-
-    /**
-     * @param callable $callable
-     * @return static
-     */
-    public function mapWithKeys(callable $callable);
-
-    /**
-     * @param callable $callable
-     * @return static
-     */
-    public function mapKeys(callable $callable);
 }

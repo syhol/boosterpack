@@ -178,14 +178,14 @@ describe("Generators", function() {
 
             $nocachedResults = $nocache->drop(50)
                 ->map(function($a) { return "this is $a."; })
-                ->bind(function($a) { return [$a, 'or is it?']; })
+                ->flatMap(function($a) { return [$a, 'or is it?']; })
                 ->tail()
                 ->unshift('This is foobar.')
                 ->take(5);
 
             $cachedResults = $cached->drop(50)
                 ->map(function($a) { return "this is $a."; })
-                ->bind(function($a) { return [$a, 'or is it?']; })
+                ->flatMap(function($a) { return [$a, 'or is it?']; })
                 ->tail()
                 ->unshift('This is foobar.')
                 ->take(5);
@@ -412,7 +412,7 @@ describe("Generators", function() {
         });
     });
 
-    describe("->bind", function() {
+    describe("->flatMap", function() {
 
         it("can bind values", function() {
 
@@ -421,12 +421,12 @@ describe("Generators", function() {
             });
 
             $binder = function ($x) { return $x % 2 === 0 ? [$x, $x] : []; };
-            expect($list->bind($binder)->take(10)->toArray())
+            expect($list->flatMap($binder)->take(10)->toArray())
                 ->toEqual([2, 2, 4, 4, 6, 6, 8, 8]);
         });
     });
 
-    describe("->concat", function() {
+    describe("->append", function() {
 
         it("can combine two generators", function() {
 
@@ -437,7 +437,7 @@ describe("Generators", function() {
                 foreach (range(5, 8) as $a) yield $a;
             });
 
-            expect($list1->concat($list2)->take(10)->toArray())
+            expect($list1->append($list2)->take(10)->toArray())
                 ->toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
         });
 
@@ -450,7 +450,36 @@ describe("Generators", function() {
                 $a = 1; while (true) yield $a++;
             });
 
-            expect($list1->concat($list2)->take(10)->toArray())
+            expect($list1->append($list2)->take(10)->toArray())
+                ->toEqual([1, 2, 3, 4, 1, 2, 3, 4, 5, 6]);
+        });
+    });
+
+    describe("->prepend", function() {
+
+        it("can combine two generators", function() {
+
+            $list1 = new Generator(function() {
+                foreach (range(1, 4) as $a) yield $a;
+            });
+            $list2 = new Generator(function() {
+                foreach (range(5, 8) as $a) yield $a;
+            });
+
+            expect($list1->prepend($list2)->take(10)->toArray())
+                ->toEqual([5, 6, 7, 8, 1, 2, 3, 4]);
+        });
+
+        it("can combine a generator and an infinite generator", function() {
+
+            $list1 = new Generator(function() {
+                $a = 1; while (true) yield $a++;
+            });
+            $list2 = new Generator(function() {
+                foreach (range(1, 4) as $a) yield $a;
+            });
+
+            expect($list1->prepend($list2)->take(10)->toArray())
                 ->toEqual([1, 2, 3, 4, 1, 2, 3, 4, 5, 6]);
         });
     });

@@ -44,6 +44,6 @@ function maybe($value) {
  * @param $default
  * @return mixed
  */
-function extract($value, $default) {
+function extract($value, $default = null) {
     return $value instanceof Comonad ? $value->extract() : $default ;
 }

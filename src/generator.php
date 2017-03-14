@@ -41,7 +41,9 @@ function until(callable $predicate, callable $transform, $initial)
 function repeat($item)
 {
     return new Generator(function() use ($item) {
-        yield $item;
+        while (true) {
+            yield $item;
+        }
     });
 }
 

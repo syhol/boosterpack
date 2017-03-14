@@ -53,7 +53,7 @@ class Vector implements IteratorAggregate, VectorInterface
      * @param callable $function
      * @return static
      */
-    public function bind(callable $function)
+    public function flatMap(callable $function)
     {
         $new = $this->getEmpty();
         foreach ($this->items as $item) {
@@ -62,17 +62,6 @@ class Vector implements IteratorAggregate, VectorInterface
             }
         }
         return $new;
-    }
-
-    /**
-     * @param mixed $item
-     * @return static
-     */
-    public function unshift($item)
-    {
-        $items = $this->items;
-        array_unshift($items, $item);
-        new self($items);
     }
 
     /**
@@ -95,10 +84,21 @@ class Vector implements IteratorAggregate, VectorInterface
      * @param mixed $value
      * @return static
      */
-    public function concat($value)
+    public function append($value)
     {
         $new = $this->items;
         foreach ($value as $item) array_push($new, $item);
+        return new self($new);
+    }
+
+    /**
+     * @param mixed $value
+     * @return static
+     */
+    public function prepend($value)
+    {
+        $new = $this->items;
+        foreach ($value as $item) array_unshift($new, $item);
         return new self($new);
     }
 
@@ -171,6 +171,18 @@ class Vector implements IteratorAggregate, VectorInterface
         return array_reduce($this->items, $function, $initial);
     }
 
+
+    /**
+     * @param mixed $item
+     * @return static
+     */
+    public function unshift($item)
+    {
+        $items = $this->items;
+        array_unshift($items, $item);
+        new self($items);
+    }
+
     /**
      * @param mixed $item
      * @return static
@@ -180,6 +192,51 @@ class Vector implements IteratorAggregate, VectorInterface
         $items = $this->items;
         array_push($items, $item);
         return new self($items);
+    }
+
+    /**
+     * @return Maybe[]|static[] [Maybe, static]
+     */
+    public function pop()
+    {
+        return [$this->end(), $this->init()];
+    }
+
+    /**
+     * @return static
+     */
+    public function init()
+    {
+        return $this->dropEnd(1);
+    }
+
+    /**
+     * @return Maybe
+     */
+    public function end()
+    {
+        $items = $this->items;
+        return empty($items) ? new Nothing() : new Just(array_pop($items));
+    }
+
+    /**
+     * @param $count
+     * @return static
+     */
+    public function dropEnd($count)
+    {
+        $new = $this->items;
+        return new self(array_slice($new, 0, count($new) - $count));
+    }
+
+    /**
+     * @param $count
+     * @return VectorInterface
+     */
+    public function takeEnd($count)
+    {
+        $new = $this->items;
+        return new self(array_slice($new, -$count));
     }
 
     /**
@@ -214,30 +271,18 @@ class Vector implements IteratorAggregate, VectorInterface
     }
 
     /**
-     * @param callable $callable
-     * @return static
-     */
-    public function mapWithKeys(callable $callable)
-    {
-        // TODO: Implement mapWithKeys() method.
-    }
-
-    /**
-     * @param callable $callable
-     * @return static
-     */
-    public function mapKeys(callable $callable)
-    {
-        // TODO: Implement mapKeys() method.
-    }
-
-    /**
      * @param mixed $value
      * @return VectorInterface
      */
     public function keysOf($value)
     {
-        // TODO: Implement keysOf() method.
+        $new = new self;
+        foreach ($this->items as $key => $item) {
+            if ($item === $value) {
+                $new = $new->push($key);
+            }
+        }
+        return $new;
     }
 
     /**
@@ -246,7 +291,13 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     public function findKeys(callable $callable)
     {
-        // TODO: Implement findKeys() method.
+        $new = new self;
+        foreach ($this->items as $key => $item) {
+            if ($callable($item)) {
+                $new = $new->push($key);
+            }
+        }
+        return $new;
     }
 
     /**
@@ -254,7 +305,11 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     public function pairs()
     {
-        // TODO: Implement pairs() method.
+        $new = new self;
+        foreach ($this->items as $key => $value) {
+            $new = $new->push([$key, $value]);
+        }
+        return $new;
     }
 
     /**
@@ -263,7 +318,11 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     public static function unPairs($pairs)
     {
-        // TODO: Implement unPairs() method.
+        $new = new self;
+        foreach ($pairs as $pair) {
+            $new = $new->push(array_pop($pair));
+        }
+        return $new;
     }
 
     /**
@@ -277,7 +336,7 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     public function count()
     {
-        // TODO: Implement count() method.
+        return count($this->items);
     }
 
     /**
@@ -286,49 +345,7 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     public function equals($other)
     {
-        // TODO: Implement equals() method.
-    }
-
-    /**
-     * @return Maybe[]|static[] [Maybe, static]
-     */
-    public function pop()
-    {
-        // TODO: Implement pop() method.
-    }
-
-    /**
-     * @return static
-     */
-    public function init()
-    {
-        // TODO: Implement init() method.
-    }
-
-    /**
-     * @return Maybe
-     */
-    public function end()
-    {
-        // TODO: Implement end() method.
-    }
-
-    /**
-     * @param $count
-     * @return static
-     */
-    public function dropEnd($count)
-    {
-        // TODO: Implement dropEnd() method.
-    }
-
-    /**
-     * @param $count
-     * @return VectorInterface
-     */
-    public function takeEnd($count)
-    {
-        // TODO: Implement takeEnd() method.
+        return $other->toArray() === $this->items;
     }
 
     /**
@@ -337,16 +354,17 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     public function sort(callable $callable = null)
     {
-        // TODO: Implement sort() method.
+        $new = $this->items;
+        is_callable($callable) ? usort($new, $callable) : natsort($new);
+        return new self($new);
     }
 
     /**
-     * @param callable|null $callable
      * @return static
      */
-    public function reverse(callable $callable = null)
+    public function reverse()
     {
-        // TODO: Implement reverse() method.
+        return new self(array_reverse($this->items));
     }
 
     /**
@@ -358,7 +376,7 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     function jsonSerialize()
     {
-        // TODO: Implement jsonSerialize() method.
+        return $this->items;
     }
 
     /**
@@ -367,7 +385,7 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     public function hasKey($value)
     {
-        // TODO: Implement hasKey() method.
+        return isset($this->items[$value]);
     }
 
     /**
@@ -376,7 +394,7 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     public function hasValue($value)
     {
-        // TODO: Implement hasValue() method.
+        return in_array($this->items, $value);
     }
 
     /**
@@ -385,6 +403,6 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     public function valueAt($index)
     {
-        // TODO: Implement valueAt() method.
+        return $this->hasKey($index) ? new Just($this->items[$index]) : new Nothing();
     }
 }

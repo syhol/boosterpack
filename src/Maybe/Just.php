@@ -45,14 +45,9 @@ class Just implements Maybe, Comonad
         return $this;
     }
 
-    public function bind(callable $callable)
+    public function flatMap(callable $callable)
     {
         return $callable($this->value);
-    }
-
-    public function orBind(callable $function)
-    {
-        return $this;
     }
 
     public function equals($other)

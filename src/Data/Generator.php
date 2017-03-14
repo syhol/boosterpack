@@ -56,7 +56,7 @@ class Generator implements IteratorAggregate, InfiniteList
      * @param callable $function
      * @return static
      */
-    public function bind(callable $function)
+    public function flatMap(callable $function)
     {
         return $this->transform(function(Traversable $traversable) use ($function) {
             foreach ($traversable as $item) {
@@ -103,13 +103,29 @@ class Generator implements IteratorAggregate, InfiniteList
      * @param mixed $value
      * @return static
      */
-    public function concat($value)
+    public function append($value)
     {
         return $this->transform(function (Traversable $traversable) use ($value) {
             foreach ($traversable as $item) {
                 yield $item;
             }
             foreach ($value as $item) {
+                yield $item;
+            }
+        });
+    }
+
+    /**
+     * @param mixed $value
+     * @return static
+     */
+    public function prepend($value)
+    {
+        return $this->transform(function (Traversable $traversable) use ($value) {
+            foreach ($value as $item) {
+                yield $item;
+            }
+            foreach ($traversable as $item) {
                 yield $item;
             }
         });
