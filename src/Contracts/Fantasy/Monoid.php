@@ -2,8 +2,20 @@
 
 namespace Boosterpack\Contracts\Fantasy;
 
-interface Monoid extends Semigroup
+interface Monoid
 {
+    /**
+     * @param mixed $value
+     * @return static
+     */
+    public function append($value);
+
+    /**
+     * @param mixed $value
+     * @return static
+     */
+    public function prepend($value);
+
     /**
      * @return static
      */
