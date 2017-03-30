@@ -12,6 +12,11 @@ class Nothing implements Maybe
         return [];
     }
 
+    function jsonSerialize()
+    {
+        return null;
+    }
+
     public function map(callable $function)
     {
         return $this;

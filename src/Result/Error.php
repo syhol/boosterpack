@@ -29,6 +29,11 @@ class Error implements Result
         return $this->value;
     }
 
+    public function extend(callable $extender)
+    {
+        return $this;
+    }
+
     public function map(callable $function)
     {
         return $this;

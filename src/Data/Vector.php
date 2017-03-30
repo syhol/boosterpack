@@ -5,13 +5,16 @@ namespace Boosterpack\Data;
 use ArrayIterator;
 use Boosterpack\Contracts\Data\Maybe;
 use Boosterpack\Contracts\Data\Vector as VectorInterface;
+use Boosterpack\Contracts\Fantasy\Foldable;
+use Boosterpack\Contracts\Fantasy\Monoid;
+use Boosterpack\Contracts\FiniteIterable;
 use Boosterpack\Maybe\Just;
 use Boosterpack\Maybe\Nothing;
 use EmptyIterator;
 use IteratorAggregate;
 use Traversable;
 
-class Vector implements IteratorAggregate, VectorInterface
+class Vector implements Monoid, FiniteIterable
 {
     /**
      * @var array
@@ -121,7 +124,7 @@ class Vector implements IteratorAggregate, VectorInterface
     /**
      * @return Maybe
      */
-    public function head()
+    public function first()
     {
         $item = new Nothing;
 
@@ -213,7 +216,7 @@ class Vector implements IteratorAggregate, VectorInterface
     /**
      * @return Maybe
      */
-    public function end()
+    public function last()
     {
         $items = $this->items;
         return empty($items) ? new Nothing() : new Just(array_pop($items));
@@ -380,29 +383,126 @@ class Vector implements IteratorAggregate, VectorInterface
     }
 
     /**
-     * @param mixed $value
-     * @return boolean
-     */
-    public function hasKey($value)
-    {
-        return isset($this->items[$value]);
-    }
-
-    /**
-     * @param mixed $value
-     * @return boolean
-     */
-    public function hasValue($value)
-    {
-        return in_array($this->items, $value);
-    }
-
-    /**
      * @param mixed $index
      * @return Maybe
      */
-    public function valueAt($index)
+    public function elementAt($index)
     {
         return $this->hasKey($index) ? new Just($this->items[$index]) : new Nothing();
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool
+     */
+    public function contains($value)
+    {
+        // TODO: Implement contains() method.
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        // TODO: Implement isEmpty() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return bool
+     */
+    public function any(callable $predicate)
+    {
+        // TODO: Implement any() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return bool
+     */
+    public function all(callable $predicate)
+    {
+        // TODO: Implement all() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return Foldable[] Returns 2 foldables
+     */
+    public function partition(callable $predicate)
+    {
+        // TODO: Implement partition() method.
+    }
+
+    /**
+     * @return string
+     */
+    public function join()
+    {
+        // TODO: Implement join() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return Maybe
+     */
+    public function findFirst(callable $predicate)
+    {
+        // TODO: Implement findFirst() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return Maybe
+     */
+    public function findLast(callable $predicate)
+    {
+        // TODO: Implement findLast() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return static
+     */
+    public function dropEndWhile(callable $predicate)
+    {
+        // TODO: Implement dropEndWhile() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return static
+     */
+    public function takeEndWhile(callable $predicate)
+    {
+        // TODO: Implement takeEndWhile() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return static
+     */
+    public function filter(callable $predicate)
+    {
+        // TODO: Implement filter() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return static
+     */
+    public function dropWhile(callable $predicate)
+    {
+        // TODO: Implement dropWhile() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return static
+     */
+    public function takeWhile(callable $predicate)
+    {
+        // TODO: Implement takeWhile() method.
     }
 }

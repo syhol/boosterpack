@@ -20,19 +20,19 @@ interface ShrinkableEnd
     /**
      * @return Maybe
      */
-    public function end();
+    public function last();
 
     /**
-     * @param $count
+     * @param int $amount
      * @return static
      */
-    public function dropEnd($count);
+    public function dropEnd($amount);
 
     /**
-     * @param $count
-     * @return Vector
+     * @param int $amount
+     * @return static
      */
-    public function takeEnd($count);
+    public function takeEnd($amount);
 
 }
 

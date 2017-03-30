@@ -25,9 +25,19 @@ class Just implements Maybe, Comonad
         return [$this->value];
     }
 
+    function jsonSerialize()
+    {
+        return $this->value;
+    }
+
     public function extract()
     {
         return $this->value;
+    }
+
+    public function extend(callable $extender)
+    {
+        return new Just($extender($this));
     }
 
     public function map(callable $function)

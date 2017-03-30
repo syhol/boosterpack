@@ -15,7 +15,7 @@ interface ShrinkableStart
     /**
      * @return Maybe
      */
-    public function head();
+    public function first();
 
     /**
      * @return static
@@ -23,14 +23,14 @@ interface ShrinkableStart
     public function tail();
 
     /**
-     * @param $count
+     * @param int $amount
      * @return static
      */
-    public function drop($count);
+    public function drop($amount);
 
     /**
-     * @param $count
-     * @return Vector
+     * @param int $amount
+     * @return static
      */
-    public function take($count);
+    public function take($amount);
 }

@@ -29,6 +29,11 @@ class Ok implements Result
         return $this->value;
     }
 
+    public function extend(callable $extender)
+    {
+        return new Ok($extender($this));
+    }
+
     public function map(callable $function)
     {
         return new Ok($function($this->value));

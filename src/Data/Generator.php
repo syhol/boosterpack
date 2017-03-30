@@ -2,9 +2,10 @@
 
 namespace Boosterpack\Data;
 
-use Boosterpack\Contracts\Data\InfiniteList;
 use Boosterpack\Contracts\Data\Maybe;
 use Boosterpack\Contracts\Data\Vector;
+use Boosterpack\Contracts\Fantasy\Monoid;
+use Boosterpack\Contracts\Iterable;
 use Boosterpack\Data\Vector as StdVector;
 use Boosterpack\Maybe\Just;
 use Boosterpack\Maybe\Nothing;
@@ -12,7 +13,7 @@ use EmptyIterator;
 use IteratorAggregate;
 use Traversable;
 
-class Generator implements IteratorAggregate, InfiniteList
+class Generator implements IteratorAggregate, Monoid, Iterable
 {
     /**
      * @var callable
@@ -150,7 +151,7 @@ class Generator implements IteratorAggregate, InfiniteList
     /**
      * @return Maybe
      */
-    public function head()
+    public function first()
     {
         $item = new Nothing;
 
@@ -226,5 +227,41 @@ class Generator implements IteratorAggregate, InfiniteList
     public function getIterator()
     {
         return call_user_func($this->generatorFactory);
+    }
+
+    /**
+     * @param $index
+     * @return Maybe
+     */
+    public function elementAt($index)
+    {
+        // TODO: Implement elementAt() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return static
+     */
+    public function dropWhile(callable $predicate)
+    {
+        // TODO: Implement dropWhile() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return static
+     */
+    public function takeWhile(callable $predicate)
+    {
+        // TODO: Implement takeWhile() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return static
+     */
+    public function filter(callable $predicate)
+    {
+        // TODO: Implement filter() method.
     }
 }

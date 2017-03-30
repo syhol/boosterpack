@@ -4,9 +4,10 @@ namespace Boosterpack\Contracts;
 
 use Boosterpack\Contracts\Data\Maybe;
 use Boosterpack\Contracts\Fantasy\Monad;
+use Boosterpack\Contracts\Resizable\ShrinkableStart;
 use Traversable;
 
-interface Iterable extends Monad, Traversable
+interface Iterable extends Monad, Traversable, ShrinkableStart
 {
     /**
      * @param $index
@@ -15,21 +16,10 @@ interface Iterable extends Monad, Traversable
     public function elementAt($index);
 
     /**
-     * @return Maybe
-     */
-    public function first();
-
-    /**
-     * @param int $amount
+     * @param callable $predicate
      * @return static
      */
-    public function drop($amount);
-
-    /**
-     * @param int $amount
-     * @return static
-     */
-    public function take($amount);
+    public function filter(callable $predicate);
 
     /**
      * @param callable $predicate
@@ -42,10 +32,4 @@ interface Iterable extends Monad, Traversable
      * @return static
      */
     public function takeWhile(callable $predicate);
-
-    /**
-     * @param callable $predicate
-     * @return static
-     */
-    public function filter(callable $predicate);
 }

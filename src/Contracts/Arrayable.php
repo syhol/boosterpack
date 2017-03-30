@@ -2,7 +2,9 @@
 
 namespace Boosterpack\Contracts;
 
-interface Arrayable
+use JsonSerializable;
+
+interface Arrayable extends JsonSerializable
 {
     /**
      * @return array

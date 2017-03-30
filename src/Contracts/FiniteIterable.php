@@ -1,23 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: simon
- * Date: 30/03/17
- * Time: 12:41
- */
 
 namespace Boosterpack\Contracts;
 
 use Boosterpack\Contracts\Data\Maybe;
 use Boosterpack\Contracts\Fantasy\Foldable;
+use Boosterpack\Contracts\Resizable\ShrinkableEnd;
 
-interface FiniteIterable extends Iterable, Foldable
+interface FiniteIterable extends Iterable, Foldable, ShrinkableEnd
 {
-    /**
-     * @return Maybe
-     */
-    public function last();
-
     /**
      * @param callable $predicate
      * @return Maybe
@@ -31,7 +21,14 @@ interface FiniteIterable extends Iterable, Foldable
     public function findLast(callable $predicate);
 
     /**
-     * @return bool
+     * @param callable $predicate
+     * @return static
      */
-    public function join();
+    public function dropEndWhile(callable $predicate);
+
+    /**
+     * @param callable $predicate
+     * @return static
+     */
+    public function takeEndWhile(callable $predicate);
 }
