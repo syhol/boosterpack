@@ -23,6 +23,12 @@ interface Iterable extends Monad, Traversable, ShrinkableStart
 
     /**
      * @param callable $predicate
+     * @return Foldable[] Returns 2 foldables
+     */
+    public function partition(callable $predicate);
+
+    /**
+     * @param callable $predicate
      * @return static
      */
     public function dropWhile(callable $predicate);

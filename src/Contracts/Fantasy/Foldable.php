@@ -38,12 +38,6 @@ interface Foldable extends Countable, Arrayable
     public function all(callable $predicate);
 
     /**
-     * @param callable $predicate
-     * @return Foldable[] Returns 2 foldables
-     */
-    public function partition(callable $predicate);
-
-    /**
      * @return string
      */
     public function join();
