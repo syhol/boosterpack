@@ -2,25 +2,15 @@
 
 namespace Boosterpack\Contracts\Resizable;
 
-use Boosterpack\Contracts\Data\Maybe;
-use Boosterpack\Contracts\Data\Vector;
+use Boosterpack\Contracts\Maybe;
+use Boosterpack\Contracts\Vector;
 
 interface ShrinkableStart
 {
     /**
-     * @return Maybe[]|static[] [Maybe, static]
-     */
-    public function shift();
-
-    /**
      * @return Maybe
      */
     public function first();
-
-    /**
-     * @return static
-     */
-    public function tail();
 
     /**
      * @param int $amount

@@ -2,7 +2,7 @@
 
 namespace Boosterpack;
 
-use Boosterpack\Contracts\Data\InfiniteList;
+use Boosterpack\Contracts\InfiniteList;
 use Boosterpack\Data\Generator;
 
 /**

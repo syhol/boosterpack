@@ -2,9 +2,10 @@
 
 namespace Boosterpack\Data;
 
-use Boosterpack\Contracts\Data\Maybe;
-use Boosterpack\Contracts\Data\Vector;
+use Boosterpack\Contracts\Maybe;
+use Boosterpack\Contracts\Vector;
 use Boosterpack\Contracts\Fantasy\Monoid;
+use Boosterpack\Contracts\Foldable;
 use Boosterpack\Contracts\Iterable;
 use Boosterpack\Data\Vector as StdVector;
 use Boosterpack\Maybe\Just;

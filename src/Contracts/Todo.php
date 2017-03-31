@@ -2,7 +2,7 @@
 
 namespace Boosterpack\Contracts;
 
-use Boosterpack\Contracts\Data\Maybe;
+use Boosterpack\Contracts\Maybe;
 
 interface Todo
 {
@@ -100,4 +100,29 @@ interface Todo
     public function lastKeyOf($value);
     public function findFirstKey(callable $callable);
     public function findLastKey(callable $callable);
+
+
+
+    /**
+     * @param mixed $value
+     * @return bool
+     */
+    public function contains($value);
+
+    /**
+     * @param callable $predicate
+     * @return bool
+     */
+    public function any(callable $predicate);
+
+    /**
+     * @param callable $predicate
+     * @return bool
+     */
+    public function all(callable $predicate);
+
+    /**
+     * @return string
+     */
+    public function join();
 }

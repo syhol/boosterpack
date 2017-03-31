@@ -3,8 +3,8 @@
 namespace Boosterpack\Data;
 
 use ArrayIterator;
-use Boosterpack\Contracts\Data\Maybe;
-use Boosterpack\Contracts\Data\Vector as VectorInterface;
+use Boosterpack\Contracts\Maybe;
+use Boosterpack\Contracts\Vector as VectorInterface;
 use Boosterpack\Contracts\Fantasy\Foldable;
 use Boosterpack\Contracts\Fantasy\Monoid;
 use Boosterpack\Contracts\FiniteIterable;
@@ -169,7 +169,7 @@ class Vector implements Monoid, FiniteIterable
      * @param mixed $initial
      * @return mixed
      */
-    public function reduce(callable $function, $initial)
+    public function reduce(callable $function, $initial = null)
     {
         return array_reduce($this->items, $function, $initial);
     }
@@ -445,24 +445,6 @@ class Vector implements Monoid, FiniteIterable
 
     /**
      * @param callable $predicate
-     * @return Maybe
-     */
-    public function findFirst(callable $predicate)
-    {
-        // TODO: Implement findFirst() method.
-    }
-
-    /**
-     * @param callable $predicate
-     * @return Maybe
-     */
-    public function findLast(callable $predicate)
-    {
-        // TODO: Implement findLast() method.
-    }
-
-    /**
-     * @param callable $predicate
      * @return static
      */
     public function dropEndWhile(callable $predicate)
@@ -504,5 +486,14 @@ class Vector implements Monoid, FiniteIterable
     public function takeWhile(callable $predicate)
     {
         // TODO: Implement takeWhile() method.
+    }
+
+    /**
+     * @param callable $predicate
+     * @return Maybe
+     */
+    public function find(callable $predicate)
+    {
+        // TODO: Implement find() method.
     }
 }

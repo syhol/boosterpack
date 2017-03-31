@@ -2,7 +2,7 @@
 
 namespace Boosterpack\Maybe;
 
-use Boosterpack\Contracts\Data\Maybe;
+use Boosterpack\Contracts\Maybe;
 use Exception;
 
 class Nothing implements Maybe

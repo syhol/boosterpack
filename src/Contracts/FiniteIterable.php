@@ -2,7 +2,7 @@
 
 namespace Boosterpack\Contracts;
 
-use Boosterpack\Contracts\Data\Maybe;
+use Boosterpack\Contracts\Maybe;
 use Boosterpack\Contracts\Fantasy\Foldable;
 use Boosterpack\Contracts\Resizable\ShrinkableEnd;
 
@@ -12,13 +12,7 @@ interface FiniteIterable extends Iterable, Foldable, ShrinkableEnd
      * @param callable $predicate
      * @return Maybe
      */
-    public function findFirst(callable $predicate);
-
-    /**
-     * @param callable $predicate
-     * @return Maybe
-     */
-    public function findLast(callable $predicate);
+    public function find(callable $predicate);
 
     /**
      * @param callable $predicate

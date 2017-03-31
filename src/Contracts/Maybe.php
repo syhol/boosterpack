@@ -1,6 +1,6 @@
 <?php
 
-namespace Boosterpack\Contracts\Data;
+namespace Boosterpack\Contracts;
 
 use Boosterpack\Contracts\Fantasy\Monad;
 use Boosterpack\Contracts\Arrayable;

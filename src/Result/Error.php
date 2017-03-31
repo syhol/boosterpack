@@ -2,7 +2,7 @@
 
 namespace Boosterpack\Result;
 
-use Boosterpack\Contracts\Data\Result;
+use Boosterpack\Contracts\Result;
 
 class Error implements Result
 {

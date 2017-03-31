@@ -2,7 +2,7 @@
 
 namespace Boosterpack\Maybe;
 
-use Boosterpack\Contracts\Data\Maybe;
+use Boosterpack\Contracts\Maybe;
 use Boosterpack\Contracts\Fantasy\Comonad;
 
 class Just implements Maybe, Comonad

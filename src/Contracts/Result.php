@@ -1,10 +1,9 @@
 <?php
 
-namespace Boosterpack\Contracts\Data;
+namespace Boosterpack\Contracts;
 
 use Boosterpack\Contracts\Fantasy\Comonad;
 use Boosterpack\Contracts\Fantasy\Monad;
-use Boosterpack\Contracts\Arrayable;
 use Boosterpack\Contracts\Fantasy\Setoid;
 use Boosterpack\Result\Error;
 use Boosterpack\Result\Ok;

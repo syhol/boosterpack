@@ -13,32 +13,4 @@ interface Foldable extends Countable, Arrayable
      * @return mixed
      */
     public function reduce(callable $predicate, $initial = null);
-
-    /**
-     * @param mixed $value
-     * @return bool
-     */
-    public function contains($value);
-
-    /**
-     * @return bool
-     */
-    public function isEmpty();
-
-    /**
-     * @param callable $predicate
-     * @return bool
-     */
-    public function any(callable $predicate);
-
-    /**
-     * @param callable $predicate
-     * @return bool
-     */
-    public function all(callable $predicate);
-
-    /**
-     * @return string
-     */
-    public function join();
 }

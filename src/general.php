@@ -2,7 +2,7 @@
 
 namespace Boosterpack;
 
-use Boosterpack\Contracts\Data\Maybe;
+use Boosterpack\Contracts\Maybe;
 use Boosterpack\Contracts\Fantasy\Comonad;
 use Boosterpack\Maybe\Just;
 use Boosterpack\Maybe\Nothing;
