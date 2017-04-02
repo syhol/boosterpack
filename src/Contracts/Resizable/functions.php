@@ -5,13 +5,14 @@ namespace Boosterpack\Contracts\Resizable;
 use Boosterpack\Contracts\Data\Maybe;
 use Boosterpack\Data\Vector;
 use Boosterpack\Maybe\Just;
+use Closure;
 
 /**
  * @param int|callable $condition
  * @param ShrinkableStart $items
  * @return ShrinkableStart
  */
-public function drop($condition, ShrinkableStart $items)
+function drop($condition, ShrinkableStart $items)
 {
     $predicate = is_integer($condition) ? trueNTimes($condition) : $condition;
 
@@ -30,7 +31,7 @@ public function drop($condition, ShrinkableStart $items)
  * @param ShrinkableStart $items
  * @return Vector
  */
-public function take($condition, ShrinkableStart $items)
+function take($condition, ShrinkableStart $items)
 {
     $predicate = is_integer($condition) ? trueNTimes($condition) : $condition;
 
@@ -49,7 +50,7 @@ public function take($condition, ShrinkableStart $items)
  * @param integer $amount
  * @return Closure
  */
-public function trueNTimes($amount)
+function trueNTimes($amount)
 {
     $count = 0;
     return function () use ($count, $amount) {
@@ -61,7 +62,7 @@ public function trueNTimes($amount)
  * @param ShrinkableStart $items
  * @return Maybe[]|ShrinkableStart[] [Maybe, self]
  */
-public function pop(ShrinkableEnd $items)
+function pop(ShrinkableEnd $items)
 {
     return $items->pop();
 }
@@ -69,8 +70,9 @@ public function pop(ShrinkableEnd $items)
 /**
  * @param ShrinkableStart $items
  * @return Maybe[]|ShrinkableStart[] [Maybe, self]
+ * @return Maybe[]|ShrinkableStart[] [Maybe, self]
  */
-public function shift(ShrinkableStart $items)
+function shift(ShrinkableStart $items)
 {
     return $items->shift();
 }
@@ -79,7 +81,7 @@ public function shift(ShrinkableStart $items)
  * @param ShrinkableStart $items
  * @return Maybe
  */
-public function head(ShrinkableStart $items)
+function head(ShrinkableStart $items)
 {
     return $items->head();
 }
@@ -88,7 +90,7 @@ public function head(ShrinkableStart $items)
  * @param ShrinkableStart $items
  * @return ShrinkableStart
  */
-public function tail(ShrinkableStart $items)
+function tail(ShrinkableStart $items)
 {
     return $items->tail();
 }
