@@ -6,23 +6,22 @@ use Boosterpack\Contracts\Maybe;
 use Boosterpack\Contracts\Fantasy\Foldable;
 use Boosterpack\Contracts\Resizable\ShrinkableEnd;
 
-interface FiniteIterable extends Iterable, Foldable, ShrinkableEnd
+interface FiniteIterable extends Iterable, Foldable
 {
     /**
-     * @param callable $predicate
      * @return Maybe
      */
-    public function find(callable $predicate);
+    public function last();
 
     /**
-     * @param callable $predicate
+     * @param int $amount
      * @return static
      */
-    public function dropEndWhile(callable $predicate);
+    public function dropEnd($amount);
 
     /**
-     * @param callable $predicate
+     * @param int $amount
      * @return static
      */
-    public function takeEndWhile(callable $predicate);
+    public function takeEnd($amount);
 }
