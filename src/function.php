@@ -58,6 +58,16 @@ function invoke(callable $callable, ...$params) {
 }
 
 /**
+ * @param $propertyName
+ * @return Closure
+ */
+function property($propertyName) {
+    return function($object) use ($propertyName) {
+        return $object->$propertyName;
+    };
+}
+
+/**
  * @param $method
  * @return Closure
  */
@@ -146,10 +156,13 @@ function reflectCallable(callable $callable) {
 
 /**
  * @param callable $callable
+ * @param bool $withOptionParams
  * @return int
  */
-function getArity(callable $callable) {
-    return reflectCallable($callable)->getNumberOfRequiredParameters();
+function getArity(callable $callable, $withOptionParams = false) {
+    return $withOptionParams
+        ? reflectCallable($callable)->getNumberOfParameters()
+        : reflectCallable($callable)->getNumberOfRequiredParameters();
 }
 
 /**
@@ -170,7 +183,7 @@ function setArity(callable $callable, $arity) {
  */
 function partial(callable $callable, array $params) {
     return function (...$extraParams) use ($callable, $params) {
-        return $callable(array_merge($params, $extraParams));
+        return $callable(...array_merge($params, $extraParams));
     };
 }
 
@@ -183,8 +196,46 @@ function partial(callable $callable, array $params) {
 function curry(callable $callable, array $params = [], $count = null) {
     $count = is_null($count) ? getArity($callable) : $count;
     $curry = function (...$params) use($callable, $count) {
-        $partial = partial($callable, $params); /** @type callable $partial */
+        $partial = partial($callable, $params);
         return count($params) >= $count ? $partial() : curry($partial, [], $count - count($params));
     };
     return $curry(...$params);
+}
+
+
+function operator($operator, ...$params) {
+    $functions = [
+        'instanceof' => function($a, $b) { return $a instanceof $b; },
+        '!'   => function($a)     { return ! $a;      },
+        '*'   => function($a, $b) { return $a *   $b; },
+        '/'   => function($a, $b) { return $a /   $b; },
+        '%'   => function($a, $b) { return $a %   $b; },
+        '+'   => function($a, $b) { return $a +   $b; },
+        '-'   => function($a, $b) { return $a -   $b; },
+        '.'   => function($a, $b) { return $a .   $b; },
+        '<<'  => function($a, $b) { return $a <<  $b; },
+        '>>'  => function($a, $b) { return $a >>  $b; },
+        '<'   => function($a, $b) { return $a <   $b; },
+        '<='  => function($a, $b) { return $a <=  $b; },
+        '>'   => function($a, $b) { return $a >   $b; },
+        '>='  => function($a, $b) { return $a >=  $b; },
+        '=='  => function($a, $b) { return $a ==  $b; },
+        '!='  => function($a, $b) { return $a !=  $b; },
+        '===' => function($a, $b) { return $a === $b; },
+        '!==' => function($a, $b) { return $a !== $b; },
+        '&'   => function($a, $b) { return $a &   $b; },
+        '^'   => function($a, $b) { return $a ^   $b; },
+        '|'   => function($a, $b) { return $a |   $b; },
+        '&&'  => function($a, $b) { return $a &&  $b; },
+        '||'  => function($a, $b) { return $a ||  $b; },
+        '**'  => function($a, $b) { return $a **  $b; },
+        '<=>' => function($a, $b) {
+            return $a == $b ? 0 : ($a < $b ? -1 : 1);
+        },
+    ];
+
+    if (!isset($functions[$operator])) {
+        throw new \InvalidArgumentException("Unknown operator \"$operator\"");
+    }
+    return curry($functions[$operator], $params);
 }
