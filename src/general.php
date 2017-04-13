@@ -47,3 +47,45 @@ function maybe($value) {
 function extract($value, $default = null) {
     return $value instanceof Comonad ? $value->extract() : $default ;
 }
+
+/**
+ * @param string $operator
+ * @param array ...$params
+ * @return callable
+ */
+function operator($operator, ...$params) {
+    $functions = [
+        'instanceof' => function($a, $b) { return $a instanceof $b; },
+        '!'   => function($a)     { return ! $a;      },
+        '*'   => function($a, $b) { return $a *   $b; },
+        '/'   => function($a, $b) { return $a /   $b; },
+        '%'   => function($a, $b) { return $a %   $b; },
+        '+'   => function($a, $b) { return $a +   $b; },
+        '-'   => function($a, $b) { return $a -   $b; },
+        '.'   => function($a, $b) { return $a .   $b; },
+        '<<'  => function($a, $b) { return $a <<  $b; },
+        '>>'  => function($a, $b) { return $a >>  $b; },
+        '<'   => function($a, $b) { return $a <   $b; },
+        '<='  => function($a, $b) { return $a <=  $b; },
+        '>'   => function($a, $b) { return $a >   $b; },
+        '>='  => function($a, $b) { return $a >=  $b; },
+        '=='  => function($a, $b) { return $a ==  $b; },
+        '!='  => function($a, $b) { return $a !=  $b; },
+        '===' => function($a, $b) { return $a === $b; },
+        '!==' => function($a, $b) { return $a !== $b; },
+        '&'   => function($a, $b) { return $a &   $b; },
+        '^'   => function($a, $b) { return $a ^   $b; },
+        '|'   => function($a, $b) { return $a |   $b; },
+        '&&'  => function($a, $b) { return $a &&  $b; },
+        '||'  => function($a, $b) { return $a ||  $b; },
+        '**'  => function($a, $b) { return $a **  $b; },
+        '<=>' => function($a, $b) {
+            return $a == $b ? 0 : ($a < $b ? -1 : 1);
+        },
+    ];
+
+    if (!isset($functions[$operator])) {
+        throw new \InvalidArgumentException("Unknown operator \"$operator\"");
+    }
+    return curry($functions[$operator], $params);
+}
