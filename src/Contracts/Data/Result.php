@@ -29,9 +29,4 @@ interface Result extends Monad, Setoid, Arrayable, Comonad
      * @return Ok
      */
     public function orValue($default);
-
-    /**
-     * @throws Throwable
-     */
-    public function throwIt();
 }

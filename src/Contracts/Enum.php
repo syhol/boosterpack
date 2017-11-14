@@ -22,5 +22,5 @@ interface Enum
      * @param mixed $to
      * @return Monad|ShrinkableStart
      */
-    public function range($from, $to = null);
+    public static function range($from, $to = null);
 }

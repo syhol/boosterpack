@@ -6,8 +6,9 @@ use Boosterpack\Contracts\Fantasy\Monad;
 use Boosterpack\Contracts\Arrayable;
 use Boosterpack\Contracts\Fantasy\Setoid;
 use Boosterpack\Maybe\Just;
+use Boosterpack\Contracts\Fantasy\Comonad;
 
-interface Maybe extends Monad, Setoid, Arrayable
+interface Maybe extends Monad, Setoid, Arrayable, Comonad
 {
     /**
      * @param mixed $default
@@ -20,10 +21,4 @@ interface Maybe extends Monad, Setoid, Arrayable
      * @return Just
      */
     public function orElse(callable $callable);
-
-    /**
-     * @param string $message the exception message to use when throwing
-     * @return mixed
-     */
-    public function expect($message);
 }

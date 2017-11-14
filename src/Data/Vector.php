@@ -7,9 +7,9 @@ use Boosterpack\Contracts\Data\Maybe;
 use Boosterpack\Contracts\Data\Vector as VectorInterface;
 use Boosterpack\Maybe\Just;
 use Boosterpack\Maybe\Nothing;
-use EmptyIterator;
 use IteratorAggregate;
 use Traversable;
+use UnexpectedValueException;
 
 class Vector implements IteratorAggregate, VectorInterface
 {
@@ -111,11 +111,27 @@ class Vector implements IteratorAggregate, VectorInterface
     }
 
     /**
+     * @return Maybe[]|static[] [Maybe, static]
+     */
+    public function pop()
+    {
+        return [$this->end(), $this->init()];
+    }
+
+    /**
      * @return static
      */
     public function tail()
     {
         return $this->drop(1);
+    }
+
+    /**
+     * @return static
+     */
+    public function init()
+    {
+        return $this->dropEnd(1);
     }
 
     /**
@@ -131,6 +147,15 @@ class Vector implements IteratorAggregate, VectorInterface
         }
 
         return $item;
+    }
+
+    /**
+     * @return Maybe
+     */
+    public function end()
+    {
+        $items = $this->items;
+        return empty($items) ? new Nothing() : new Just(array_pop($items));
     }
 
     /**
@@ -154,23 +179,24 @@ class Vector implements IteratorAggregate, VectorInterface
     }
 
     /**
-     * @return array
+     * @param $count
+     * @return static
      */
-    public function toArray()
+    public function dropEnd($count)
     {
-        return $this->items;
+        $new = $this->items;
+        return new self(array_slice($new, 0, count($new) - $count));
     }
 
     /**
-     * @param callable $function
-     * @param mixed $initial
-     * @return mixed
+     * @param $count
+     * @return VectorInterface
      */
-    public function reduce(callable $function, $initial)
+    public function takeEnd($count)
     {
-        return array_reduce($this->items, $function, $initial);
+        $new = $this->items;
+        return new self(array_slice($new, -$count));
     }
-
 
     /**
      * @param mixed $item
@@ -195,48 +221,21 @@ class Vector implements IteratorAggregate, VectorInterface
     }
 
     /**
-     * @return Maybe[]|static[] [Maybe, static]
+     * @return array
      */
-    public function pop()
+    public function toArray()
     {
-        return [$this->end(), $this->init()];
+        return $this->items;
     }
 
     /**
-     * @return static
+     * @param callable $function
+     * @param mixed $initial
+     * @return mixed
      */
-    public function init()
+    public function reduce(callable $function, $initial)
     {
-        return $this->dropEnd(1);
-    }
-
-    /**
-     * @return Maybe
-     */
-    public function end()
-    {
-        $items = $this->items;
-        return empty($items) ? new Nothing() : new Just(array_pop($items));
-    }
-
-    /**
-     * @param $count
-     * @return static
-     */
-    public function dropEnd($count)
-    {
-        $new = $this->items;
-        return new self(array_slice($new, 0, count($new) - $count));
-    }
-
-    /**
-     * @param $count
-     * @return VectorInterface
-     */
-    public function takeEnd($count)
-    {
-        $new = $this->items;
-        return new self(array_slice($new, -$count));
+        return array_reduce($this->items, $function, $initial);
     }
 
     /**
@@ -385,7 +384,7 @@ class Vector implements IteratorAggregate, VectorInterface
      */
     public function hasKey($value)
     {
-        return isset($this->items[$value]);
+        return array_key_exists($value, $this->items);
     }
 
     /**
@@ -404,5 +403,17 @@ class Vector implements IteratorAggregate, VectorInterface
     public function valueAt($index)
     {
         return $this->hasKey($index) ? new Just($this->items[$index]) : new Nothing();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function extract()
+    {
+        if (count($this->items) !== 1) {
+            throw new UnexpectedValueException();
+        }
+
+        return $this->items[0];
     }
 }

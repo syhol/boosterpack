@@ -6,10 +6,10 @@ use Boosterpack\Contracts\Fantasy\Foldable;
 
 interface FoldableExtras extends Foldable
 {
-
     public function first($condition = null); // Foldable extra
     public function last($condition = null); // Foldable extra
 
+    public function group(callable $function);
     public function partition(callable $function);
     public function any(callable $callable);
     public function all(callable $callable);

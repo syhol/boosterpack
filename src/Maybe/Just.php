@@ -3,9 +3,8 @@
 namespace Boosterpack\Maybe;
 
 use Boosterpack\Contracts\Data\Maybe;
-use Boosterpack\Contracts\Fantasy\Comonad;
 
-class Just implements Maybe, Comonad
+class Just implements Maybe
 {
     /**
      * @var mixed
@@ -53,10 +52,5 @@ class Just implements Maybe, Comonad
     public function equals($other)
     {
         return $other instanceof Just && $other->extract() === $this->value;
-    }
-
-    public function expect($message)
-    {
-        return $this->value;
     }
 }

@@ -3,7 +3,7 @@
 namespace Boosterpack\Maybe;
 
 use Boosterpack\Contracts\Data\Maybe;
-use Exception;
+use UnexpectedValueException;
 
 class Nothing implements Maybe
 {
@@ -37,8 +37,11 @@ class Nothing implements Maybe
         return $other instanceof Nothing;
     }
 
-    public function expect($message)
+    /**
+     * @return mixed
+     */
+    public function extract()
     {
-        throw new \UnexpectedValueException($message);
+        throw new UnexpectedValueException();
     }
 }

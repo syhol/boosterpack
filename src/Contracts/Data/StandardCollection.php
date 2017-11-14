@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: simon
- * Date: 03/02/17
- * Time: 17:11
- */
 
 namespace Boosterpack\Contracts\Data;
 

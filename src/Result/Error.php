@@ -26,7 +26,7 @@ class Error implements Result
 
     public function extract()
     {
-        return $this->value;
+        throw $this->value;
     }
 
     public function map(callable $function)
@@ -57,10 +57,5 @@ class Error implements Result
     public function equals($other)
     {
         return $other instanceof self && $other->extract() === $this->value;
-    }
-
-    public function throwIt()
-    {
-        throw $this->value;
     }
 }

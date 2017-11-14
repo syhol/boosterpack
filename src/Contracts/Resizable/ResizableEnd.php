@@ -2,7 +2,7 @@
 
 namespace Boosterpack\Contracts\Resizable;
 
-interface ResizableEnd extends  GrowableEnd, ShrinkableEnd
+interface ResizableEnd extends GrowableEnd, ShrinkableEnd
 {
 
 }

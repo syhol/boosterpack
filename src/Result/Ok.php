@@ -58,9 +58,4 @@ class Ok implements Result
     {
         return $other instanceof self && $other->extract() === $this->value;
     }
-
-    public function throwIt()
-    {
-        return $this;
-    }
 }

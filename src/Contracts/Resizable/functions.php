@@ -59,8 +59,8 @@ function trueNTimes($amount)
 }
 
 /**
- * @param ShrinkableStart $items
- * @return Maybe[]|ShrinkableStart[] [Maybe, self]
+ * @param ShrinkableEnd $items
+ * @return Maybe[]|ShrinkableEnd[] [Maybe, self]
  */
 function pop(ShrinkableEnd $items)
 {
